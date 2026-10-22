@@ -1,0 +1,14 @@
+14:52:18 === mk03_c4: jobs 15 machines 8 ops 150 cells 4 transitions 113
+14:52:32 dispatch UB 204 (EST); HT energetic 151, HT best 204 (13.8s)
+14:52:36 compact TI-LP bound z_TI: 204.000 [OPTIMAL, 4.3s]
+14:52:48 init: dispatch EST UB=204  gamma_HT=204  (energetic 151)
+14:52:50 it   1  t=  13.8s  z_RMP=204.000  Phi=204.000  LB=204.000  UB=204  gap=0.00%  cols=4  +0  a=0.70
+14:52:51 CG: LB 204.000 (Lagr 204.000, HT 204) UB 204 gap 0.00% [lp_optimal, 14.4s, 1 it, 4 cols]
+14:53:04 sg it   0  t=  13.5s  Phi=101.035  best=101.035  LB=204.000
+14:53:28 sg it  10  t=  37.7s  Phi=117.221  best=117.221  LB=204.000
+14:53:58 sg it  20  t=  67.6s  Phi=124.425  best=124.425  LB=204.000
+14:54:22 subgradient (LP oracle): Lagr 126.985 [29 it, 90.8s]
+14:54:22 CP-SAT plant: UB 204 LB 204 [OPTIMAL, 0.1s]
+14:54:22 row: {"instance": "mk03_c4", "jobs": 15, "machines": 8, "ops": 150, "cells": 4, "transitions": 113, "time_limit": 180.0, "threads": 2, "ub_dispatch": 204, "lb_ht_energetic": 151, "lb_ht": 204, "t_ht": 13.8, "z_ti": 204.0, "t_ti": 4.3, "z_ti_status": "OPTIMAL", "lb_cg": 204.0, "lb_cg_lagr": 204.0, "ub_cg": 204, "gap_cg": 0.0, "t_gap_closed": 13.803954362869263, "cg_iters": 1, "cg_cols": 4, "cg_exact": 4, "t_cg": 14.4, "cg_status": "lp_optimal", "lb_sg": 126.985, "sg_iters": 29, "t_sg": 90.8, "ub_cpsat": 204, "lb_cpsat": 204, "cpsat_status": "OPTIMAL", "t_cpsat": 0.1, "best_ub": 204, "cert_gap_ours": 0.0, "cert_gap_cpsat": 0.0}
+14:54:22 === mk10_c4: jobs 20 machines 15 ops 240 cells 4 transitions 145
+14:55:43 dispatch UB 296 (EST-MWR); HT energetic 198, HT best 269 (81.2s)

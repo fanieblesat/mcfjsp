@@ -1,0 +1,69 @@
+15:09:43 === mk10_c4: jobs 20 machines 15 ops 240 cells 4 transitions 145
+15:11:01 dispatch UB 296 (EST-MWR); HT energetic 198, HT best 269 (78.3s)
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+15:13:25 compact TI-LP bound z_TI: 173.841 (grid kappa=0.125) [OPTIMAL, 144.0s]
+15:14:43 init: dispatch EST-MWR UB=296  gamma_HT=269  (energetic 198)
+15:14:57   LNS cell0: 296 -> 289
+15:15:02   LNS jobs: 289 -> 279
+15:15:02   LNS jobs: 279 -> 278
+15:15:07   LNS cell0: 278 -> 277
+15:15:22   UB improved to 277
+15:15:22 it   1  t= 116.5s  z_RMP=296.000  Phi=138.000  LB=269.000  UB=277  gap=2.97%  cols=8  +1  a=0.70
+15:15:31 it   2  t= 126.2s  z_RMP=277.000  Phi=138.000  LB=269.000  UB=277  gap=2.97%  cols=10  +2  a=0.70
+15:15:42 it   3  t= 136.6s  z_RMP=277.000  Phi=76.962  LB=269.000  UB=277  gap=2.97%  cols=12  +2  a=0.70
+15:15:49 it   4  t= 143.6s  z_RMP=277.000  Phi=138.000  LB=269.000  UB=277  gap=2.97%  cols=13  +1  a=0.70
+15:15:58 it   5  t= 152.3s  z_RMP=277.000  Phi=121.500  LB=269.000  UB=277  gap=2.97%  cols=14  +1  a=0.70
+15:16:08 it   6  t= 162.3s  z_RMP=277.000  Phi=115.501  LB=269.000  UB=277  gap=2.97%  cols=17  +3  a=0.70
+15:16:35 it   7  t= 190.1s  z_RMP=277.000  Phi=90.136  LB=269.000  UB=277  gap=2.97%  cols=19  +2  a=0.70
+15:16:36 CG: LB 269.000 (Lagr 138.000, HT 269) UB 277 gap 2.97% [time_limit, 191.1s, 7 it, 19 cols]
+15:18:52 sg it   0  t= 135.1s  Phi=152.183  best=152.183  LB=269.000
+15:18:52 subgradient (LP oracle): Lagr 152.183 [1 it, 135.1s]
+15:21:52 CP-SAT plant: UB 274 LB 143 [FEASIBLE, 180.0s]
+15:21:52 row: {"instance": "mk10_c4", "jobs": 20, "machines": 15, "ops": 240, "cells": 4, "transitions": 145, "time_limit": 180.0, "threads": 2, "ub_dispatch": 296, "lb_ht_energetic": 198, "lb_ht": 269, "t_ht": 78.3, "z_ti": 173.841, "z_ti_kappa": 0.125, "t_ti": 144.0, "z_ti_status": "OPTIMAL", "lb_cg": 269.0, "lb_cg_lagr": 138.0, "ub_cg": 277, "gap_cg": 2.97, "t_gap_closed": null, "cg_iters": 7, "cg_cols": 19, "cg_exact": 18, "t_cg": 191.1, "cg_status": "time_limit", "lb_sg": 152.183, "sg_iters": 1, "t_sg": 135.1, "ub_cpsat": 274, "lb_cpsat": 143, "cpsat_status": "FEASIBLE", "t_cpsat": 180.0, "best_ub": 274, "cert_gap_ours": 1.86, "cert_gap_cpsat": 91.61}
+15:21:52 === gen_c5_n60_s1: jobs 60 machines 16 ops 265 cells 5 transitions 142
+15:22:33 dispatch UB 283 (MWR); HT energetic 252, HT best 252 (41.1s)
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+15:24:32 compact TI-LP bound z_TI: 136.916 (grid kappa=0.25) [OPTIMAL, 119.5s]
+15:25:12 init: dispatch MWR UB=283  gamma_HT=252  (energetic 252)
+15:25:20   LNS cell1: 283 -> 280
+15:25:25   LNS cell4: 280 -> 255
+15:25:50   UB improved to 255
+15:25:50 it   1  t=  78.0s  z_RMP=283.000  Phi=45.000  LB=252.000  UB=255  gap=1.19%  cols=11  +1  a=0.70
+15:26:02 it   2  t=  90.2s  z_RMP=255.000  Phi=39.600  LB=252.000  UB=255  gap=1.19%  cols=12  +1  a=0.70
+15:26:11 it   3  t=  98.8s  z_RMP=255.000  Phi=36.000  LB=252.000  UB=255  gap=1.19%  cols=13  +1  a=0.70
+15:26:19 it   4  t= 107.2s  z_RMP=255.000  Phi=-45.187  LB=252.000  UB=255  gap=1.19%  cols=19  +6  a=0.70
+15:26:30 it   5  t= 117.4s  z_RMP=255.000  Phi=-956.101  LB=252.000  UB=255  gap=1.19%  cols=24  +5  a=0.70
+15:26:40 it   6  t= 127.6s  z_RMP=255.000  Phi=-640.691  LB=252.000  UB=255  gap=1.19%  cols=37  +13  a=0.70
+15:26:50 it   7  t= 138.2s  z_RMP=255.000  Phi=-746.514  LB=252.000  UB=255  gap=1.19%  cols=58  +21  a=0.70
+15:27:02 it   8  t= 149.8s  z_RMP=255.000  Phi=-1064.324  LB=252.000  UB=255  gap=1.19%  cols=69  +11  a=0.70
+15:27:47 it   9  t= 195.3s  z_RMP=252.000  Phi=107.100  LB=252.000  UB=255  gap=1.19%  cols=69  +0  a=0.60 (misprice)
+15:27:48 CG: LB 252.000 (Lagr 252.000, HT 252) UB 255 gap 1.19% [lp_optimal, 196.4s, 9 it, 69 cols]
+15:29:02 sg it   0  t=  73.4s  Phi=70.929  best=70.929  LB=252.000
+15:29:28 subgradient (LP oracle): Lagr 70.929 [2 it, 99.9s]
+15:32:28 CP-SAT plant: UB 253 LB 72 [FEASIBLE, 180.0s]
+15:32:28 row: {"instance": "gen_c5_n60_s1", "jobs": 60, "machines": 16, "ops": 265, "cells": 5, "transitions": 142, "time_limit": 180.0, "threads": 2, "ub_dispatch": 283, "lb_ht_energetic": 252, "lb_ht": 252, "t_ht": 41.1, "z_ti": 136.916, "z_ti_kappa": 0.25, "t_ti": 119.5, "z_ti_status": "OPTIMAL", "lb_cg": 252.0, "lb_cg_lagr": 252.0, "ub_cg": 255, "gap_cg": 1.19, "t_gap_closed": null, "cg_iters": 9, "cg_cols": 69, "cg_exact": 44, "t_cg": 196.4, "cg_status": "lp_optimal", "lb_sg": 70.929, "sg_iters": 2, "t_sg": 99.9, "ub_cpsat": 253, "lb_cpsat": 72, "cpsat_status": "FEASIBLE", "t_cpsat": 180.0, "best_ub": 253, "cert_gap_ours": 0.4, "cert_gap_cpsat": 251.39}
+15:32:28 === gen_c8_n120_s2: jobs 120 machines 22 ops 530 cells 8 transitions 319
+15:33:09 dispatch UB 373 (EST-MWR); HT energetic 343, HT best 343 (40.5s)
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+15:35:06 compact TI-LP bound z_TI: 190.381 (grid kappa=0.125) [OPTIMAL, 117.2s]
+15:35:47 init: dispatch EST-MWR UB=373  gamma_HT=343  (energetic 343)
+15:36:19   LNS cell1: 362 -> 346
+15:36:44   UB improved to 362
+15:36:44   UB improved to 346
+15:36:44 it   1  t=  97.7s  z_RMP=373.000  Phi=39.000  LB=343.000  UB=346  gap=0.87%  cols=26  +2  a=0.70
+15:37:09 it   2  t= 122.9s  z_RMP=346.000  Phi=42.300  LB=343.000  UB=346  gap=0.87%  cols=27  +1  a=0.70
+15:37:24 it   3  t= 137.9s  z_RMP=346.000  Phi=-178.894  LB=343.000  UB=346  gap=0.87%  cols=39  +12  a=0.70
+15:37:49 it   4  t= 162.9s  z_RMP=346.000  Phi=-294.765  LB=343.000  UB=346  gap=0.87%  cols=54  +15  a=0.70
+15:38:11 it   5  t= 185.0s  z_RMP=346.000  Phi=-699.377  LB=343.000  UB=346  gap=0.87%  cols=62  +8  a=0.70
+15:38:12 CG: LB 343.000 (Lagr 42.300, HT 343) UB 346 gap 0.87% [time_limit, 186.0s, 5 it, 62 cols]
+15:39:48 subgradient (LP oracle): Lagr -inf [0 it, 95.9s]
+15:42:48 CP-SAT plant: UB 346 LB 132 [FEASIBLE, 180.1s]
+15:42:48 row: {"instance": "gen_c8_n120_s2", "jobs": 120, "machines": 22, "ops": 530, "cells": 8, "transitions": 319, "time_limit": 180.0, "threads": 2, "ub_dispatch": 373, "lb_ht_energetic": 343, "lb_ht": 343, "t_ht": 40.5, "z_ti": 190.381, "z_ti_kappa": 0.125, "t_ti": 117.2, "z_ti_status": "OPTIMAL", "lb_cg": 343.0, "lb_cg_lagr": 42.3, "ub_cg": 346, "gap_cg": 0.87, "t_gap_closed": null, "cg_iters": 5, "cg_cols": 62, "cg_exact": 34, "t_cg": 186.0, "cg_status": "time_limit", "lb_sg": -Infinity, "sg_iters": 0, "t_sg": 95.9, "ub_cpsat": 346, "lb_cpsat": 132, "cpsat_status": "FEASIBLE", "t_cpsat": 180.1, "best_ub": 346, "cert_gap_ours": 0.87, "cert_gap_cpsat": 162.12}
+15:42:48 done: 3 instances -> results/pilot2.csv

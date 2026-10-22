@@ -1,0 +1,9 @@
+[project]
+name = "mcfjsp"
+version = "0.1.0"
+description = "Certified column generation for multi-cell flexible job shop scheduling under machine failures"
+requires-python = ">=3.11"
+dependencies = ["ortools>=9.12", "numpy>=1.26", "scipy>=1.11"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
