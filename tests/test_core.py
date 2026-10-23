@@ -131,3 +131,76 @@ def test_counterexample_prop3():
     assert adaptive.mean() < 4.0 - 0.1
     static = np.maximum(d1 + d3, d2)
     assert static.mean() >= 4.0
+
+
+def test_critical_path_and_lns_neighbourhoods():
+    """critical_ops: every returned op is tight (H + p + Q == Cmax) and the set
+    contains a chain ending at the makespan; LNS with all neighbourhoods only
+    returns feasible, non-worse schedules."""
+    from mcfjsp.primal import critical_ops, cell_lns, neighbourhoods
+    inst = generate(n_cells=4, machines_per_cell=(1, 2), n_jobs=10, ops_per_job=(3, 5), proc_range=(1, 9),
+                    flexibility=0.5, revisit_prob=0.3, seed=21)
+    h, q = heads_tails(inst)
+    sch, _, _ = best_dispatch(inst, q)
+    crit = critical_ops(inst, sch)
+    assert crit and any(sch.comp[a] == sch.makespan for a in crit)
+    assert any(sch.start[a] == (inst.release[inst.op_job[a]] if inst.op_pos[a] == 0 else 0) for a in crit)
+    rng = np.random.default_rng(0)
+    names = set()
+    for k, (name, free) in enumerate(neighbourhoods(inst, lambda: sch, rng)):
+        names.add(name.rstrip("0123456789-"))
+        assert free and free <= set(range(inst.n_ops))
+        if k >= 2 * inst.n_cells + 6:
+            break
+    assert {"cell", "critical", "window", "jobs", "cells"} <= names, names
+    new = cell_lns(inst, sch, time_budget=10, cell_time=2, threads=2)
+    check_feasible(inst, new)
+    assert new.makespan <= sch.makespan
+
+
+def test_master_dual_fallback_consistent():
+    """The SciPy/HiGHS fallback for the master (used when GLOP returns
+    ABNORMAL) must give the same objective and the same certificate at its
+    duals as GLOP: Phi(duals_scipy) == Phi(duals_glop) == z_RMP at LP optimality."""
+    inst = generate(n_cells=3, machines_per_cell=(1, 2), n_jobs=6, ops_per_job=(2, 4), proc_range=(1, 9),
+                    flexibility=0.5, revisit_prob=0.3, seed=12)
+    cg = ColumnGeneration(inst, CGParams(time_limit=120, cp_time=10, cp_threads=2, lns_time=0, pb_every=10 ** 9,
+                                         exact_every=1, use_ht_cut=True, stop_on_gap=False, alpha=0.0))
+    r = cg.run()
+    assert r.status == "lp_optimal", r.status
+    out = {}
+    for backend in ("glop", "scipy"):
+        cg.lp.backend = backend
+        assert cg.lp.solve() == "OPTIMAL"
+        gamma, rho, pi, eta = cg._duals()
+        w, v = cg.weights(rho, pi)
+        _, betas, exact_all = cg._price(w, v, gamma, 0, force_exact=True)
+        assert exact_all
+        out[backend] = (cg.lp.objective, cg.certificate(rho, eta, betas), sum(gamma))
+    cg.close()
+    for i in range(3):
+        assert abs(out["glop"][i] - out["scipy"][i]) < 1e-3, (i, out)
+    assert abs(out["scipy"][1] - r.z_rmp) < 1e-3, out
+
+
+def test_strong_duality_at_termination():
+    """At LP optimality with exact pricing, the certificate Phi(pi, rho) must equal
+    the master value z_RMP (strong duality). Any error in duals, weights,
+    reduced costs or the certificate formula breaks this equality."""
+    from mcfjsp.cg import ColumnGeneration, CGParams
+    inst = generate(n_cells=3, machines_per_cell=(1, 2), n_jobs=6, ops_per_job=(2, 4), proc_range=(1, 9),
+                    flexibility=0.5, revisit_prob=0.3, seed=11)
+    for use_cut in (False, True):
+        cg = ColumnGeneration(inst, CGParams(time_limit=120, cp_time=10, cp_threads=2, lns_time=0, pb_every=10 ** 9,
+                                             exact_every=1, use_ht_cut=use_cut, stop_on_gap=False, alpha=0.0))
+        r = cg.run()
+        assert r.status == "lp_optimal", r.status
+        # re-evaluate the certificate at the final duals with exact pricing
+        cg.lp.solve()
+        gamma, rho, pi, eta = cg._duals()
+        w, v = cg.weights(rho, pi)
+        added, betas, exact_all = cg._price(w, v, gamma, 0, force_exact=True)
+        phi = cg.certificate(rho, eta, betas)
+        assert exact_all and added == 0
+        assert abs(phi - r.z_rmp) < 1e-3, (phi, r.z_rmp)
+        cg.close()

@@ -56,6 +56,8 @@ def main():
     ap.add_argument("--time", type=float, default=120.0)
     ap.add_argument("--threads", type=int, default=2)
     ap.add_argument("--cp-time", type=float, default=0.0, help="CP-SAT seconds per cell per scenario (0 = LP only)")
+    ap.add_argument("--bound", choices=["ht", "lagr"], default="lagr",
+                    help="per-scenario certificate: head-tail only (fast) or head-tail + Lagrangian at the CG duals")
     ap.add_argument("--out", default="results/stochastic")
     args = ap.parse_args()
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(message)s", datefmt="%H:%M:%S",
@@ -70,6 +72,12 @@ def main():
     r = cg.run()
     plan = r.schedule
     log.info("plan on inflated instance: makespan %d, certificate %.2f", plan.makespan, r.lb)
+    # mean-value certificate for static policies (Prop. 2): a lower bound on the instance with p~ rounded DOWN
+    floor_inst = inst.failure_inflated_rounded(round_down=True, kappa=1)
+    r_mv = ColumnGeneration(floor_inst, CGParams(time_limit=max(30.0, args.time / 2), cp_threads=args.threads,
+                                                 cp_time=5, lns_time=0, pb_every=10 ** 9)).run()
+    mv_bound = r_mv.lb
+    log.info("mean-value certificate (static policies): %.2f", mv_bound)
     # duals from the CG run (for the Lagrangian part of the scenario certificate)
     gamma, rho, pi, eta = cg._duals() if cg.lp.status == "OPTIMAL" else (None, None, None, None)
     duals = {"rho": rho, "pi": pi, "eta": eta} if rho is not None else None
@@ -79,11 +87,14 @@ def main():
             "reactive-MWR": lambda D: reactive_execute(inst, rule_policy(inst, q, "MWR"), D)}
     t = time.time()
     rep = evaluate(inst, pols, args.scenarios, args.seed, kappa=args.kappa, duals=duals, cp_time=args.cp_time,
-                   threads=args.threads)
-    log.info("N=%d scenarios in %.1fs: E[Phi]=%.2f  LCB(z^NA)=%.2f", rep.n, time.time() - t, rep.phi_mean, rep.phi_lcb)
+                   threads=args.threads, use_lp=(args.bound == "lagr"), static_policies={"static"},
+                   mean_value_bound=mv_bound, log=log)
+    log.info("N=%d scenarios in %.1fs: E[Phi]=%.2f  LCB(z^NA)=%.2f  mean-value bound (z^stat)=%.2f",
+             rep.n, time.time() - t, rep.phi_mean, rep.phi_lcb, mv_bound)
     for k in pols:
-        log.info("  %-14s E[C]=%.2f  CVaR95=%.2f  gap=%.2f (UCB %.2f)  min pathwise gap %.2f", k, rep.policy_mean[k],
-                 rep.policy_cvar95[k], rep.gap_mean[k], rep.gap_ucb[k], rep.min_pathwise_gap[k])
+        log.info("  %-14s E[C]=%.2f  CVaR95=%.2f  certificate=%.2f  gap=%.2f (UCB %.2f, %.1f%%)  min pathwise gap %.2f",
+                 k, rep.policy_mean[k], rep.policy_cvar95[k], rep.certificate[k], rep.gap_mean[k], rep.gap_ucb[k],
+                 100 * rep.gap_mean[k] / rep.certificate[k], rep.min_pathwise_gap[k])
     os.makedirs(os.path.dirname(args.out) or ".", exist_ok=True)
     with open(args.out + ".json", "w") as f:
         json.dump(dict(instance=inst.name, plan_makespan=plan.makespan, plan_certificate=r.lb, **rep.__dict__), f, indent=1)

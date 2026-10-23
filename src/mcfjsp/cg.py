@@ -52,8 +52,12 @@ def price_cell(task):
     w, v, gamma_c, eps = task["w"], task["v"], task["gamma_c"], task["eps"]
     beta = -math.inf; context = {}; cols = []; seen = set()
     if task["use_lp"]:
-        r = ti_lp_cell(cp, w, v, _W["cache"])
-        beta = max(beta, r.bound); context["frac_start"] = r.frac_start
+        try:
+            r = ti_lp_cell(cp, w, v, _W["cache"], max_vars=task.get("lp_max_vars", 60_000),
+                           time_limit=task.get("lp_time"))
+            beta = max(beta, r.bound); context["frac_start"] = r.frac_start
+        except Exception:
+            pass  # LP failed or timed out: no LP bound this round (certificate stays valid)
     for pr in _W["pricers"]:
         for col in pr(cp, w, v, context):
             if col.cost(w, v) - gamma_c < -eps and col.key() not in seen:
@@ -94,6 +98,9 @@ class CGParams:
     seed: int = 0
     preemptive_max_ops: int = 400
     n_workers: int = 1            # process pool over cells (>1 = parallel pricing)
+    lp_max_vars: int = 30_000     # coarsen the cell TI-LP beyond this size (Lemma EC.3)
+    ht_budget_frac: float = 0.15  # share of time_limit for the head-tail phase
+    lns_budget_frac: float = 0.35 # share of time_limit for all LNS rounds together
     stop_on_gap: bool = True      # False: continue to LP optimality for bound studies
 
 
@@ -264,8 +271,11 @@ class ColumnGeneration:
         t0 = time.time()
         sch, rule, _ = best_dispatch(inst, self.tails)
         UB = sch.makespan; best_sched = sch
+        deadline = t0 + P.time_limit
+        remaining = lambda: max(0.0, deadline - time.time())
         ht = head_tail_bounds(inst, UB, cp_time=P.ht_cp_time, threads=P.cp_threads,
-                              use_preemptive=inst.n_ops <= P.preemptive_max_ops)
+                              use_preemptive=inst.n_ops <= P.preemptive_max_ops,
+                              time_budget=P.ht_budget_frac * P.time_limit)
         self.gamma_ht = ht["gamma_ht"]
         LB = float(self.gamma_ht); lb_cg = 0.0
         log.info("init: dispatch %s UB=%d  gamma_HT=%d  (energetic %d)", rule, UB, self.gamma_ht, ht["gamma_energetic"])
@@ -275,10 +285,12 @@ class ColumnGeneration:
         alpha = P.alpha
         it = 0; status = "iter_limit"; z = math.inf
         base_cp_time = P.cp_time
+        lns_spent = 0.0; lns_total = P.lns_budget_frac * P.time_limit
+        self._remaining = remaining
         while it < P.max_iter:
-            if time.time() - t0 > P.time_limit:
+            if remaining() <= 1.0:
                 status = "time_limit"; break
-            st = self.lp.solve()
+            st = self.lp.solve(time_limit=remaining(), fallback="scipy")   # GLOP; SciPy/HiGHS dual simplex on ABNORMAL
             if st != "OPTIMAL":
                 log.warning("RMP status %s; stopping column generation (bounds so far remain valid)", st)
                 status = "rmp_" + st.lower(); break
@@ -311,16 +323,20 @@ class ColumnGeneration:
                 LB = max(LB, lb_cg)
                 alpha = max(P.alpha_min, alpha - P.alpha_step)
             # ---- primal
-            if it % P.pb_every == 0 or added == 0:
-                pb = self.price_and_branch(P.pb_time)
+            if (it % P.pb_every == 0 or added == 0) and remaining() > 2.0:
+                pb = self.price_and_branch(min(P.pb_time, remaining() * 0.5))
                 cands = [pb] if pb is not None else []
                 try:
                     cands.append(self.repair_from_lp())
                 except Exception as e:  # pragma: no cover
                     log.warning("repair failed: %s", e)
-                if P.lns_time > 0:
+                budget = min(P.lns_time, lns_total - lns_spent, remaining() * 0.5)
+                if P.lns_time > 0 and budget > 2.0:
                     seed_s = min(cands + [best_sched], key=lambda s_: s_.makespan)
-                    cands.append(cell_lns(inst, seed_s, P.lns_time, P.lns_cell_time, P.cp_threads, log, seed=P.seed + it))
+                    t_l = time.time()
+                    cands.append(cell_lns(inst, seed_s, budget, min(P.lns_cell_time, budget), P.cp_threads, log,
+                                          seed=P.seed + it))
+                    lns_spent += time.time() - t_l
                 for s_ in cands:
                     if s_.makespan < UB:
                         UB = s_.makespan; best_sched = s_
@@ -346,10 +362,8 @@ class ColumnGeneration:
                 if P.cp_time > 8 * base_cp_time:
                     status = "stalled"; break
         # final primal round with the remaining budget
-        if P.lns_time > 0:
-            remaining = max(0.0, P.time_limit - (time.time() - t0))
-            fin = cell_lns(inst, best_sched, min(P.lns_time * 2, remaining) if remaining > 0 else 1.0,
-                           P.lns_cell_time, P.cp_threads, log, seed=P.seed + 1)
+        if P.lns_time > 0 and remaining() > 5.0:
+            fin = cell_lns(inst, best_sched, remaining() - 1.0, P.lns_cell_time, P.cp_threads, log, seed=P.seed + 1)
             if fin.makespan < UB:
                 UB = fin.makespan; best_sched = fin
                 log.info("  final UB %d", UB)
@@ -382,10 +396,14 @@ class ColumnGeneration:
         for c in range(inst.n_cells):
             ops = inst.ops_of_cell[c]
             need_exact = P.exact_every > 0 and (force_exact or it % P.exact_every == 0)
+            rem = self._remaining() if hasattr(self, "_remaining") else P.time_limit
+            batches = math.ceil(inst.n_cells / max(1, P.n_workers))
+            per_cell = max(1.0, 0.4 * rem / batches)      # this pricing round gets <= 40% of the remaining time
             tasks.append(dict(c=c, heads=self.heads, tails=self.tails, T=self.T,
                               w={a: w[a] for a in ops}, v={a: v[a] for a in ops}, gamma_c=gamma[c],
-                              use_lp=P.use_lp_oracle, need_exact=need_exact,
-                              cp_time=P.cp_time if P.exact_every > 0 else 0.0,
+                              use_lp=P.use_lp_oracle, need_exact=need_exact and rem > 1.0,
+                              cp_time=min(P.cp_time, per_cell * 0.5) if P.exact_every > 0 else 0.0,
+                              lp_max_vars=P.lp_max_vars, lp_time=per_cell * 0.5,
                               threads=max(1, P.cp_threads // max(1, min(P.n_workers, inst.n_cells))) if P.n_workers > 1 else P.cp_threads,
                               eps=P.eps_rc))
         pool = self._pool()

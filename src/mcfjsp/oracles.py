@@ -203,15 +203,16 @@ class TimeIndexedLP:
                     self.z[(a, i, t)] = ncol; ncol += 1
         self.nz = ncol
         pairs = cp.internal_pairs()
+        # cumulative variables u[a,i,t] = sum_{tau<=t} z[a,i,tau] for every operation
+        # in a precedence pair (either side), so that precedence rows have O(|M|) nonzeros.
         need_u = set()
         for (b, a) in pairs:
-            need_u.add(b)
+            need_u.add(b); need_u.add(a)
         self.need_u = need_u
         for a in self.ops:
             if a in need_u:
                 for i, p in inst.op_proc[a].items():
-                    lo, hi = cp.heads[a], cp.latest_start(a, i)
-                    for t in range(lo, self.T + 1):
+                    for t in range(cp.heads[a], self.T + 1):
                         self.u[(a, i, t)] = ncol; ncol += 1
         self.ncol = ncol
         rows_lo, rows_hi = [], []
@@ -246,24 +247,22 @@ class TimeIndexedLP:
             if (a, i, t) in self.z:
                 ri.append(r); ci.append(self.z[(a, i, t)]); vals.append(-1.0)
             rows_lo.append(0.0); rows_hi.append(0.0); r += 1
-        # precedence (b before a): sum_i sum_{tau<=t} z[a,i,tau] <= sum_i u[b,i,t-p_ib]
+        # precedence (b before a): sum_i u[a,i,t] <= sum_i u[b,i,t-p_ib]
         for (b, a) in pairs:
             for t in range(cp.heads[a], self.T + 1):
-                nzr = 0
-                for i in inst.op_proc[a]:
-                    for tau in range(cp.heads[a], min(t, cp.latest_start(a, i)) + 1):
-                        ri.append(r); ci.append(self.z[(a, i, tau)]); vals.append(1.0); nzr += 1
-                if nzr == 0:
+                terms = [(self.u[(a, i, t)], 1.0) for i in inst.op_proc[a] if (a, i, t) in self.u]
+                if not terms:
                     continue
                 for i, p in inst.op_proc[b].items():
                     tt = t - p
                     if tt >= cp.heads[b]:
-                        key = (b, i, min(tt, self.T))
-                        ri.append(r); ci.append(self.u[key]); vals.append(-1.0)
+                        terms.append((self.u[(b, i, min(tt, self.T))], -1.0))
+                for col, val in terms:
+                    ri.append(r); ci.append(col); vals.append(val)
                 rows_lo.append(-math.inf); rows_hi.append(0.0); r += 1
         self.nrow = r
         from .lp import LP
-        lp = LP("glop")
+        lp = LP("highs")   # primal values only: HiGHS is several times faster than GLOP here
         for c in range(ncol):
             lp.add_var(0.0, 1.0 if c < self.nz else math.inf, 0.0)
         # group terms by row
@@ -282,7 +281,7 @@ class TimeIndexedLP:
         scale = max(1e-12, max(abs(x) for x in cost.values())) if cost else 1.0
         for c, x in cost.items():
             self.lp.set_obj(c, x / scale)
-        status = self.lp.solve(fallback="highs")
+        status = self.lp.solve(time_limit=getattr(self, "lp_time_limit", None), fallback="glop")
         if status != "OPTIMAL":
             raise RuntimeError(f"TI-LP status {status}")
         x = self.lp.values()
@@ -292,19 +291,53 @@ class TimeIndexedLP:
         return float(self.lp.objective) * scale, s, C, status
 
 
-def ti_lp_cell(cp: CellProblem, w, v, cache: Optional[dict] = None) -> OracleResult:
-    key = (cp.cell, cp.T)
+def estimate_ti_vars(cp: CellProblem) -> int:
+    inst = cp.inst
+    return sum(max(0, cp.latest_start(a, i) - cp.heads[a] + 1) for a in cp.ops for i in inst.op_proc[a])
+
+
+def coarsen_cell(cp: CellProblem, kappa: float) -> CellProblem:
+    """Cell problem on the time grid scaled by kappa < 1 (durations and
+    release dates rounded down, horizon rounded up). A feasible schedule of
+    the original maps to a feasible schedule of the coarse problem."""
+    import math as _m
+    inst = cp.inst
+    dur = {a: {i: max(1, int(_m.floor(kappa * p))) for i, p in inst.op_proc[a].items()} for a in range(inst.n_ops)}
+    rel = [int(_m.floor(kappa * r)) for r in inst.release]
+    sinst = inst.with_durations(dur, rel, name_suffix=f"_k{kappa}")
+    from .bounds import heads_tails
+    h, q = heads_tails(sinst)
+    return CellProblem(sinst, cp.cell, h, q, int(_m.ceil(kappa * cp.T)))
+
+
+def ti_lp_cell(cp: CellProblem, w, v, cache: Optional[dict] = None, max_vars: int = 30_000,
+               time_limit: Optional[float] = None) -> OracleResult:
+    """TI-LP cell bound. If the LP would exceed `max_vars` variables, the time
+    grid is coarsened by kappa = 1/2, 1/4, ... (Lemma EC.3 applied to the cell
+    problem): for a feasible original schedule S, the mapped schedule S' has
+    C' <= kappa C and s' >= kappa s - 1, so cost'(S') <= kappa cost(S) + sum_a v_a,
+    hence L_c >= (LP' - sum_a v_a) / kappa."""
+    if not cp.ops:
+        return OracleResult(0.0, 0.0, Column(cp.cell, {}, {}, {}), "EMPTY", True)
+    kappa = 1.0
+    cpk = cp
+    while estimate_ti_vars(cpk) > max_vars and kappa > 1 / 64:
+        kappa /= 2
+        cpk = coarsen_cell(cp, kappa)
+    key = (cp.cell, cp.T, kappa)
     if cache is not None and key in cache:
         lp = cache[key]
     else:
-        lp = TimeIndexedLP(cp)
+        lp = TimeIndexedLP(cpk)
         if cache is not None:
             cache[key] = lp
-    if not cp.ops:
-        return OracleResult(0.0, 0.0, Column(cp.cell, {}, {}, {}), "EMPTY", True)
+    lp.lp_time_limit = time_limit
     val, s, C, st = lp.solve(w, v)
-    res = OracleResult(val - 1e-7 * (1 + abs(val)), None, None, "LP_" + st, False)
-    res.frac_start = s; res.frac_comp = C
+    if kappa < 1.0:
+        val = (val - sum(v[a] for a in cp.ops)) / kappa
+        s = {a: x / kappa for a, x in s.items()}; C = {a: x / kappa for a, x in C.items()}
+    res = OracleResult(val - 1e-7 * (1 + abs(val)), None, None, f"LP_{st}_k{kappa}", False)
+    res.frac_start = s; res.frac_comp = C; res.kappa = kappa
     return res
 
 
@@ -365,15 +398,16 @@ def _ti_block(lp, cp: CellProblem) -> Dict[Tuple[int, int, int], int]:
         for tau, idxs in cov.items():
             if len(idxs) > 1:
                 lp.add_row([(idx, 1.0) for idx in idxs], -math.inf, 1.0)
-    # cumulative u[b,i,t] for predecessors in intra-cell pairs
+    # cumulative u[a,i,t] for both sides of intra-cell pairs
     pairs = cp.internal_pairs()
-    u: Dict[Tuple[int, int, int], int] = {}
+    need = set()
     for (b, a) in pairs:
+        need.add(b); need.add(a)
+    u: Dict[Tuple[int, int, int], int] = {}
+    for b in need:
         for i, p in inst.op_proc[b].items():
             prev = None
             for t in range(cp.heads[b], cp.T + 1):
-                if (b, i, t) in u:
-                    prev = u[(b, i, t)]; continue
                 idx = lp.add_var(0.0, math.inf, 0.0)
                 terms = [(idx, 1.0)]
                 if prev is not None:
@@ -384,8 +418,7 @@ def _ti_block(lp, cp: CellProblem) -> Dict[Tuple[int, int, int], int]:
                 u[(b, i, t)] = idx; prev = idx
     for (b, a) in pairs:
         for t in range(cp.heads[a], cp.T + 1):
-            terms = [(z[(a, i, tau)], 1.0) for i in inst.op_proc[a]
-                     for tau in range(cp.heads[a], min(t, cp.latest_start(a, i)) + 1)]
+            terms = [(u[(a, i, t)], 1.0) for i in inst.op_proc[a] if (a, i, t) in u]
             if not terms:
                 continue
             for i, p in inst.op_proc[b].items():
@@ -397,7 +430,7 @@ def _ti_block(lp, cp: CellProblem) -> Dict[Tuple[int, int, int], int]:
 
 
 def compact_ti_lp_coarse(inst: Instance, T: int, kappas=(1.0, 0.5, 0.25, 0.125), time_limit: float = 60.0,
-                         backend: str = "highs", max_vars: int = 300_000):
+                         backend: str = "highs", max_vars: int = 150_000):
     """z_TI on a coarsened time grid: durations and release dates are scaled by
     kappa and rounded down (Lemma EC.3), the LP value is divided by kappa. The
     first kappa whose LP solves within the limit is used. Returns
@@ -412,7 +445,7 @@ def compact_ti_lp_coarse(inst: Instance, T: int, kappas=(1.0, 0.5, 0.25, 0.125),
             rel = [int(_m.floor(kappa * r)) for r in inst.release]
             sinst = inst.with_durations(dur, rel, name_suffix=f"_k{kappa}")
         h, q = heads_tails(sinst)
-        Tk = int(_m.ceil(kappa * T)) + 1
+        Tk = int(_m.ceil(kappa * T))  # horizon >= kappa*Cmax*; the LP value depends strongly on T
         z, st = compact_ti_lp(sinst, h, q, Tk, time_limit=time_limit, backend=backend, max_vars=max_vars)
         if st == "OPTIMAL":
             return z / kappa, kappa, st

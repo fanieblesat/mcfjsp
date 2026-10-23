@@ -27,7 +27,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."
 
 from mcfjsp.instances import Instance, read_fjsp_text  # noqa: E402
 from mcfjsp.partition import multicell_variant  # noqa: E402
-from mcfjsp.generator import generate  # noqa: E402
+from mcfjsp.generator import generate, generate_coupled, diagnose  # noqa: E402
 from mcfjsp.bounds import head_tail_bounds, heads_tails  # noqa: E402
 from mcfjsp.dispatch import best_dispatch  # noqa: E402
 from mcfjsp.cg import CGParams, ColumnGeneration  # noqa: E402
@@ -47,10 +47,18 @@ def load_bench(name: str, root: str) -> Instance:
     return read_fjsp_text(path, name)
 
 
+RANGE_KEYS = {"machines_per_cell", "ops_per_job", "visits_per_job", "ops_per_visit", "proc_range"}
+
+
 def parse_kv(s: str) -> dict:
+    """k=v pairs separated by commas; range parameters accept 'a-b' or a single value."""
     out = {}
     for kv in s.split(","):
         k, v = kv.split("=")
+        if k in RANGE_KEYS:
+            parts = [int(x) for x in v.split("-")]
+            out[k] = (parts[0], parts[-1])
+            continue
         try:
             out[k] = int(v)
         except ValueError:
@@ -64,14 +72,17 @@ def parse_kv(s: str) -> dict:
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--bench", nargs="*", default=[])
-    ap.add_argument("--gen", nargs="*", default=[], help="generator kwargs, e.g. n_cells=5,n_jobs=100,seed=1")
+    ap.add_argument("--gen", nargs="*", default=[], help="generator v1 kwargs, e.g. n_cells=5,n_jobs=100,seed=1")
+    ap.add_argument("--coupled", nargs="*", default=[], help="generator v2 (coupling-dominated) kwargs, e.g. n_cells=8,n_jobs=20,seed=1")
+    ap.add_argument("--instances", nargs="*", default=[], help="JSON instance files")
     ap.add_argument("--cells", type=int, nargs="*", default=[3])
     ap.add_argument("--time", type=float, default=120.0)
-    ap.add_argument("--threads", type=int, default=2)
+    ap.add_argument("--threads", type=int, default=6)
     ap.add_argument("--cp-time", type=float, default=5.0)
     ap.add_argument("--lns-time", type=float, default=20.0)
-    ap.add_argument("--workers", type=int, default=1, help="process pool over cells for pricing")
+    ap.add_argument("--workers", type=int, default=3, help="process pool over cells for pricing")
     ap.add_argument("--preemptive-max-ops", type=int, default=400, help="skip the preemptive HT bound above this size")
+    ap.add_argument("--ti-max-ops", type=int, default=1000, help="skip the compact TI-LP diagnostic above this size")
     ap.add_argument("--skip-sg", action="store_true")
     ap.add_argument("--skip-cpsat", action="store_true")
     ap.add_argument("--gurobi", action="store_true")
@@ -91,6 +102,10 @@ def main():
             instances.append(multicell_variant(base, C) if C > 1 else base)
     for g in args.gen:
         instances.append(generate(**parse_kv(g)))
+    for g in args.coupled:
+        instances.append(generate_coupled(**parse_kv(g)))
+    for f in args.instances:
+        instances.append(Instance.load(f))
 
     rows = []; hist = {}
     for inst in instances:
@@ -98,6 +113,11 @@ def main():
                  inst.n_machines, inst.n_ops, inst.n_cells, len(inst.transitions))
         row = dict(instance=inst.name, jobs=inst.n_jobs, machines=inst.n_machines, ops=inst.n_ops,
                    cells=inst.n_cells, transitions=len(inst.transitions), time_limit=args.time, threads=args.threads)
+        dg = diagnose(inst)
+        row.update(ratio_workload=dg["ratio_workload"], ratio_path=dg["ratio_path"])
+        log.info("structure: workload/UB %.2f, path/UB %.2f", dg["ratio_workload"], dg["ratio_path"])
+        os.makedirs("data/generated", exist_ok=True)
+        inst.save(os.path.join("data", "generated", inst.name + ".json"))
         h, q = heads_tails(inst)
         sch, rule, _ = best_dispatch(inst, q)
         row["ub_dispatch"] = sch.makespan
@@ -107,19 +127,31 @@ def main():
         log.info("dispatch UB %d (%s); HT energetic %d, HT best %d (%.1fs)", sch.makespan, rule,
                  ht["gamma_energetic"], ht["gamma_ht"], time.time() - t)
         # z_TI: compact time-indexed LP of the plant (Proposition 'Hierarchy'), coarsened if needed
-        from mcfjsp.oracles import compact_ti_lp_coarse
-        t = time.time()
-        z_ti, kappa_ti, st_ti = compact_ti_lp_coarse(inst, sch.makespan, time_limit=args.time / 4)
-        row.update(z_ti=round(z_ti, 3), z_ti_kappa=kappa_ti, t_ti=round(time.time() - t, 1), z_ti_status=st_ti)
-        log.info("compact TI-LP bound z_TI: %.3f (grid kappa=%s) [%s, %.1fs]", z_ti, kappa_ti, st_ti, time.time() - t)
+        # (diagnostic only, not a certificate; skipped above --ti-max-ops where the LP does not solve in time/4)
+        if inst.n_ops <= args.ti_max_ops:
+            from mcfjsp.oracles import compact_ti_lp_coarse
+            t = time.time()
+            z_ti, kappa_ti, st_ti = compact_ti_lp_coarse(inst, sch.makespan, time_limit=args.time / 4)
+            row.update(z_ti=round(z_ti, 3), z_ti_kappa=kappa_ti, t_ti=round(time.time() - t, 1), z_ti_status=st_ti)
+            log.info("compact TI-LP bound z_TI: %.3f (grid kappa=%s) [%s, %.1fs]", z_ti, kappa_ti, st_ti, time.time() - t)
+        else:
+            row.update(z_ti=None, z_ti_kappa=None, t_ti=0.0, z_ti_status="skipped")
         # CG with exact pricing and HT cut
         p_cg = CGParams(time_limit=args.time, cp_time=args.cp_time, cp_threads=args.threads, lns_time=args.lns_time,
                         exact_every=3, stop_on_gap=False, n_workers=args.workers)
         cg = ColumnGeneration(inst, p_cg)
         r_cg = cg.run()
         t_close = next((rec["t"] for rec in r_cg.history if rec["lb"] > 0 and (rec["ub"] - rec["lb"]) / rec["lb"] <= 1e-12), None)
+        # which bound carries the certificate. With the head-tail cut in the master the CG bound is >= gamma_HT by
+        # construction, so 'lagr' is claimed only when it is strictly above the head-tail bound.
+        if r_cg.lb_cg > r_cg.gamma_ht + 1e-6:
+            active = "lagr"
+        elif r_cg.gamma_ht > row["lb_ht_energetic"]:
+            active = "ht_cp_or_preemptive"
+        else:
+            active = "ht_energetic"
         row.update(lb_cg=round(r_cg.lb, 3), lb_cg_lagr=round(r_cg.lb_cg, 3), ub_cg=r_cg.ub, gap_cg=round(100 * r_cg.gap, 2),
-                   t_gap_closed=t_close,
+                   t_gap_closed=t_close, active_bound=active,
                    cg_iters=r_cg.iterations, cg_cols=r_cg.n_columns, cg_exact=r_cg.exact_calls, t_cg=round(r_cg.time, 1),
                    cg_status=r_cg.status)
         hist[inst.name] = {"cg": r_cg.history}

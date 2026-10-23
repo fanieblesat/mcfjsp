@@ -166,13 +166,26 @@ def cpsat_bound_cell(inst: Instance, c: int, h: List[int], q: List[int], ub: int
 
 
 def head_tail_bounds(inst: Instance, ub: int, cp_time: float = 5.0, threads: int = 1,
-                     use_preemptive: bool = True, use_cpsat: bool = True) -> Dict:
+                     use_preemptive: bool = True, use_cpsat: bool = True,
+                     time_budget: Optional[float] = None) -> Dict:
+    """`time_budget`: total wall-clock budget for the phase; the CP-SAT time
+    per cell is reduced to fit, and the preemptive LP is skipped for the
+    remaining cells once the budget is exhausted (bounds stay valid)."""
+    import time as _t
+    t0 = _t.time()
     h, q = heads_tails(inst)
     per_cell = []
+    n = max(1, inst.n_cells)
     for c in range(inst.n_cells):
         e = energetic_bound_cell(inst, c, h, q)
-        pr = preemptive_bound_cell(inst, c, h, q, e, ub) if use_preemptive else e
-        cp = cpsat_bound_cell(inst, c, h, q, ub, cp_time, threads)[0] if use_cpsat else e
+        left = (time_budget - (_t.time() - t0)) if time_budget else None
+        cells_left = inst.n_cells - c
+        pr = e
+        if use_preemptive and (left is None or left > 0.5):
+            pr = preemptive_bound_cell(inst, c, h, q, e, ub)
+        left = (time_budget - (_t.time() - t0)) if time_budget else None
+        cpt = cp_time if left is None else min(cp_time, max(0.0, left / cells_left))
+        cp = cpsat_bound_cell(inst, c, h, q, ub, cpt, threads)[0] if (use_cpsat and cpt >= 0.2) else e
         per_cell.append({"energetic": e, "preemptive": pr, "cpsat": cp, "best": max(e, pr, cp)})
     return {"heads": h, "tails": q, "cells": per_cell,
             "gamma_ht": max(pc["best"] for pc in per_cell) if per_cell else 0,

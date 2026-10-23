@@ -43,7 +43,7 @@ class ScenarioBound:
 
 def scenario_bound(inst: Instance, D: Scenario, kappa: float = 1.0, duals: Optional[dict] = None,
                    cp_time: float = 0.0, lp_cache: Optional[dict] = None, threads: int = 1,
-                   ht_cp_time: float = 0.0) -> ScenarioBound:
+                   ht_cp_time: float = 0.0, use_lp: bool = True, lp_max_vars: int = 30_000) -> ScenarioBound:
     """Lower bound on the perfect-information optimum for scenario D.
 
     Steps: round to integers with factor kappa (Lemma EC.3); head-tail bound
@@ -57,7 +57,7 @@ def scenario_bound(inst: Instance, D: Scenario, kappa: float = 1.0, duals: Optio
     ht = head_tail_bounds(sinst, T, cp_time=ht_cp_time, threads=threads, use_cpsat=ht_cp_time > 0)
     gamma = ht["gamma_ht"]
     phi_l = -math.inf
-    if duals is not None:
+    if duals is not None and use_lp:
         rho, pi, eta = duals["rho"], duals["pi"], duals.get("eta", 0.0)
         tot = sum(rho) + eta
         rho = [r / tot for r in rho]; eta = eta / tot
@@ -70,7 +70,12 @@ def scenario_bound(inst: Instance, D: Scenario, kappa: float = 1.0, duals: Optio
             if not cp.ops:
                 continue
             wc = {a: w[a] for a in cp.ops}; vc = {a: v[a] for a in cp.ops}
-            beta = ti_lp_cell(cp, wc, vc, None).bound
+            try:
+                beta = ti_lp_cell(cp, wc, vc, None, max_vars=lp_max_vars).bound
+            except Exception:
+                beta = -math.inf
+            if beta == -math.inf and cp_time <= 0:
+                phi_l = -math.inf; break
             if cp_time > 0:
                 r = cpsat_cell(cp, wc, vc, cp_time, threads, lower_bound=beta)
                 beta = max(beta, r.bound)
@@ -94,12 +99,18 @@ class StochasticReport:
 
 def evaluate(inst: Instance, policies: Dict[str, Callable[[Scenario], float]], n_scen: int, base_seed: int,
              kappa: float = 1.0, duals: Optional[dict] = None, alpha: float = 0.05, cp_time: float = 0.0,
-             threads: int = 1) -> StochasticReport:
+             threads: int = 1, use_lp: bool = True, static_policies: Optional[set] = None,
+             mean_value_bound: Optional[float] = None, log=None) -> StochasticReport:
+    """`static_policies`: names of policies in P_stat; their certificate is
+    max(mean-value bound, sampled PI bound) (Prop. 2 + Thm. 'PI'), the
+    others use the PI bound alone."""
     from scipy import stats
     phis = []; vals = {k: [] for k in policies}
     for n in range(n_scen):
         D = sample_scenario(inst, base_seed, n)
-        sb = scenario_bound(inst, D, kappa, duals, cp_time=cp_time, threads=threads)
+        sb = scenario_bound(inst, D, kappa, duals, cp_time=cp_time, threads=threads, use_lp=use_lp)
+        if log and (n + 1) % 10 == 0:
+            log.info("  scenario %d/%d  Phi=%.2f", n + 1, n_scen, sb.phi)
         phis.append(sb.phi)
         for k, pol in policies.items():
             vals[k].append(pol(D))
@@ -107,13 +118,24 @@ def evaluate(inst: Instance, policies: Dict[str, Callable[[Scenario], float]], n
     tq = stats.t.ppf(1 - alpha, n_scen - 1)
     rep = StochasticReport(n_scen, float(phis.mean()), float(phis.mean() - tq * phis.std(ddof=1) / math.sqrt(n_scen)),
                            {}, {}, {}, {}, {})
+    rep.mean_value_bound = mean_value_bound
+    rep.certificate = {}
     for k in policies:
         x = np.array(vals[k]); d = x - phis
         assert d.min() >= -1e-6, f"pathwise gap negative for {k}: {d.min()} (bound invalid?)"
         rep.policy_mean[k] = float(x.mean())
         srt = np.sort(x); m = max(1, int(math.ceil(0.05 * n_scen)))
         rep.policy_cvar95[k] = float(srt[-m:].mean())
-        rep.gap_mean[k] = float(d.mean())
-        rep.gap_ucb[k] = float(d.mean() + tq * d.std(ddof=1) / math.sqrt(n_scen))
         rep.min_pathwise_gap[k] = float(d.min())
+        cert = rep.phi_lcb
+        if static_policies and k in static_policies and mean_value_bound is not None:
+            cert = max(cert, mean_value_bound)
+        rep.certificate[k] = float(cert)
+        if static_policies and k in static_policies and mean_value_bound is not None and mean_value_bound > rep.phi_lcb:
+            # deterministic certificate: gap = E[C] - MV bound, CI from the policy's own sample
+            rep.gap_mean[k] = float(x.mean() - mean_value_bound)
+            rep.gap_ucb[k] = float(x.mean() - mean_value_bound + tq * x.std(ddof=1) / math.sqrt(n_scen))
+        else:
+            rep.gap_mean[k] = float(d.mean())
+            rep.gap_ucb[k] = float(d.mean() + tq * d.std(ddof=1) / math.sqrt(n_scen))
     return rep

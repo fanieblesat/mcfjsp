@@ -21,7 +21,8 @@ python -m pytest tests -q                                 # ~10 s
 src/mcfjsp/
   instances.py    data model, FJSP text reader, JSON (de)serialization
   partition.py    cell partition of benchmark instances (documented rule)
-  generator.py    seeded generator of multi-cell instances with failures
+  generator.py    seeded generators: v1 (balanced routings) and v2 `generate_coupled`
+                  (job-shop-like, coupling-dominated) + `diagnose` structure ratios
   bounds.py       heads/tails, head–tail bounds (energetic, preemptive LP, CP-SAT)
   schedule.py     schedules, feasibility check, semi-active evaluation
   dispatch.py     serial schedule generation (repair) and dispatching rules
@@ -77,6 +78,50 @@ no-go above 25 % even with the head–tail bound.
   windows are fixed to zero; incumbent columns always present (RMP feasible).
 * Stochastic: scenarios are rounded down after scaling (Lemma EC.3); the
   perfect-information certificate is checked pathwise against every policy.
+
+## Time budgets (v0.2)
+
+`CGParams.time_limit` is a hard wall-clock limit: the head-tail phase gets
+`ht_budget_frac` (15 %), all LNS rounds together `lns_budget_frac` (35 %),
+each pricing round at most 40 % of the remaining time (split over cells),
+and LP/CP-SAT calls receive explicit limits. Cell TI-LPs larger than
+`lp_max_vars` are solved on a coarsened time grid (Lemma EC.3; bound
+corrected by `(LP' - sum v)/kappa`). Cell LPs use HiGHS (primal only); the
+master uses GLOP (duals).
+
+## Instance classes
+
+* Brandimarte/Hurink/Dauzere-Peres with cells (`partition.py`): bottleneck-
+  dominated; the head-tail bound is exact on all 4-cell and 2-cell variants
+  tested; CP-SAT proves optimality within seconds. Validation set.
+* Generator v1 (`generate`): balanced routings; workload/UB ~ 0.9; the
+  energetic bound is nearly exact. Not informative about coupling.
+* Generator v2 (`generate_coupled`): few jobs relative to machines, each job
+  visits (almost) every cell in random order, Taillard-type processing
+  times, 1-2 machines per cell, low flexibility. The head-tail bound is
+  4-10 % below the optimum and CP-SAT does not prove bounds beyond ~15x15.
+  Use `diagnose()` (workload/UB and path/UB both well below 1) to check.
+
+## v0.2.1 (2026-10-23)
+
+* Master LP: GLOP with a SciPy/HiGHS dual-simplex fallback on ABNORMAL
+  (`lp.py`, shadow copy of the LP; duals in the OR-Tools sign convention;
+  test `test_master_dual_fallback_consistent`). Removes the `rmp_abnormal`
+  early stops seen in pilots D/E.
+* LNS (`primal.py`): new neighbourhoods `critical` (longest path of the
+  incumbent plus machine neighbours) and `window` (operations starting in a
+  random time window), adaptive sizes, CP-SAT warm start from the incumbent
+  for all variables. On cpl_c15_n15: 1597 -> 1298 in 150 s / 2 threads
+  (v0.2: 1359; optimum 1275).
+* `scripts/pilot.py`: `active_bound` reports `lagr` only when the CG bound is
+  strictly above the head-tail bound (with the head-tail cut it is >= by
+  construction); `--ti-max-ops` (default 1000) skips the compact TI-LP
+  diagnostic where it cannot be solved in time/4.
+* Verified (logs/ldtest_sandbox.log): the pure Lagrangian dual (no head-tail
+  cut) is below the head-tail bound on all four test instances, with z_TI
+  (independent compact LP) and z_RMP bracketing it; strong duality holds at
+  termination. The head-tail bound is therefore the certificate; CG supplies
+  the prices (coordination) and primal columns.
 
 ## Known limitations / to do
 

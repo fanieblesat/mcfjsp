@@ -45,12 +45,14 @@ class SGResult:
 
 def subgradient(inst: Instance, time_limit: float = 300.0, max_iter: int = 500, a: float = 1.0, b: float = 10.0,
                 oracle: str = "lp", cp_time: float = 3.0, threads: int = 1, ht_cp_time: float = 5.0,
-                rule: str = "divergent") -> SGResult:
+                rule: str = "divergent", lp_max_vars: int = 30_000) -> SGResult:
     t0 = time.time()
+    deadline = t0 + time_limit
     h, q = heads_tails(inst)
     sch, _, _ = best_dispatch(inst, q)
     UB = sch.makespan; T = UB
-    ht = head_tail_bounds(inst, UB, cp_time=ht_cp_time, threads=threads)
+    ht = head_tail_bounds(inst, UB, cp_time=ht_cp_time, threads=threads, use_preemptive=inst.n_ops <= 400,
+                          time_budget=0.15 * time_limit)
     gamma_ht = ht["gamma_ht"]
     n = inst.n_ops; trans = inst.transitions; tidx = {a: k for k, a in enumerate(trans)}
     pi = np.zeros(len(trans)); rho = np.ones(n) / n
@@ -65,21 +67,31 @@ def subgradient(inst: Instance, time_limit: float = 300.0, max_iter: int = 500, 
         v = {aa: (pi[tidx[inst.op_pred[aa]]] if (inst.op_pred[aa] >= 0 and inst.is_transition[inst.op_pred[aa]]) else 0.0)
              for aa in range(n)}
         phi = float(np.dot(rho, q)); C = {}; S = {}
+        aborted = False
         for cp in cps:
             if not cp.ops:
                 continue
+            if time.time() > deadline:
+                aborted = True; break
             wc = {aa: w[aa] for aa in cp.ops}; vc = {aa: v[aa] for aa in cp.ops}
+            lp_time = max(1.0, deadline - time.time())
             if oracle == "lp":
-                r = ti_lp_cell(cp, wc, vc, cache); phi += r.bound
+                try:
+                    r = ti_lp_cell(cp, wc, vc, cache, max_vars=lp_max_vars, time_limit=lp_time)
+                except Exception:
+                    aborted = True; break
+                phi += r.bound
                 C.update(r.frac_comp); S.update(r.frac_start)
             else:
-                rl = ti_lp_cell(cp, wc, vc, cache)
+                rl = ti_lp_cell(cp, wc, vc, cache, max_vars=lp_max_vars, time_limit=lp_time)
                 r = cpsat_cell(cp, wc, vc, cp_time, threads, lower_bound=rl.bound)
                 phi += max(r.bound, rl.bound)
                 if r.column is not None:
                     C.update(r.column.comp); S.update(r.column.start)
                 else:
                     C.update(rl.frac_comp); S.update(rl.frac_start)
+        if aborted:
+            break
         if phi > best + 1e-9:
             best = phi; nonimprove = 0
         else:

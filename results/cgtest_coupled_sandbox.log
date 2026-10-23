@@ -1,0 +1,741 @@
+=== cpl_c15_n15_s1 m 15 ops 225 {'ops': 225, 'cells': 15, 'machines': 15, 'transitions': 210, 'ub_dispatch': 1597, 'workload_lb': 1002, 'path_lb': 928, 'ratio_workload': 0.627, 'ratio_path': 0.581}
+20:44:12 init: dispatch EST-MWR UB=1597  gamma_HT=1142  (energetic 1142)
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+20:44:20   LNS cell6: 1597 -> 1595
+20:44:21   LNS cell8: 1595 -> 1593
+20:44:21   LNS cell11: 1593 -> 1592
+20:44:21   LNS jobs: 1592 -> 1496
+20:44:22   LNS jobs: 1496 -> 1451
+20:44:22   LNS cell6: 1451 -> 1447
+20:44:22   LNS cell10: 1447 -> 1446
+20:44:22   LNS jobs: 1446 -> 1438
+20:44:22   LNS cell1: 1438 -> 1434
+20:44:23   LNS cell14: 1434 -> 1427
+20:44:23   LNS jobs: 1427 -> 1411
+20:44:24   LNS jobs: 1411 -> 1399
+20:44:24   LNS jobs: 1399 -> 1390
+20:44:24   LNS jobs: 1390 -> 1389
+20:44:24   LNS cell9: 1389 -> 1383
+20:44:25   LNS cell12: 1383 -> 1382
+20:44:25   LNS jobs: 1382 -> 1381
+20:44:26   UB improved to 1381
+20:44:26 it   1  t=  14.8s  z_RMP=1597.000  Phi=856.000  LB=1142.000  UB=1381  gap=20.93%  cols=33  +3  a=0.70
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+20:44:32 it   2  t=  21.3s  z_RMP=1381.000  Phi=320.668  LB=1142.000  UB=1381  gap=20.93%  cols=36  +3  a=0.70
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+20:44:35 it   3  t=  24.0s  z_RMP=1381.000  Phi=831.400  LB=1142.000  UB=1381  gap=20.93%  cols=38  +2  a=0.70
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+20:44:39 it   4  t=  27.9s  z_RMP=1381.000  Phi=831.400  LB=1142.000  UB=1381  gap=20.93%  cols=40  +2  a=0.70
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+20:44:41 it   5  t=  30.5s  z_RMP=1381.000  Phi=831.400  LB=1142.000  UB=1381  gap=20.93%  cols=43  +3  a=0.70
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+20:44:44 it   6  t=  32.7s  z_RMP=1381.000  Phi=-4007.984  LB=1142.000  UB=1381  gap=20.93%  cols=45  +2  a=0.70
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+20:44:46 it   7  t=  35.3s  z_RMP=1381.000  Phi=-2360.095  LB=1142.000  UB=1381  gap=20.93%  cols=56  +11  a=0.70
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+20:44:49 it   8  t=  38.0s  z_RMP=1381.000  Phi=-1796.829  LB=1142.000  UB=1381  gap=20.93%  cols=60  +4  a=0.70
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+20:44:51 it   9  t=  40.4s  z_RMP=1381.000  Phi=-404.254  LB=1142.000  UB=1381  gap=20.93%  cols=65  +5  a=0.70
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+20:44:53 it  10  t=  42.5s  z_RMP=1381.000  Phi=20.312  LB=1142.000  UB=1381  gap=20.93%  cols=78  +13  a=0.70
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+20:44:56   LNS jobs: 1381 -> 1380
+20:44:57   LNS jobs: 1380 -> 1375
+20:44:57   LNS jobs: 1375 -> 1362
+20:44:58   UB improved to 1362
+20:44:58 it  11  t=  47.2s  z_RMP=1381.000  Phi=-186.430  LB=1142.000  UB=1362  gap=19.26%  cols=120  +27  a=0.70
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+20:45:04 it  12  t=  52.8s  z_RMP=1362.000  Phi=-666.616  LB=1142.000  UB=1362  gap=19.26%  cols=141  +21  a=0.70
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+20:45:08 it  13  t=  57.0s  z_RMP=1362.000  Phi=-2150.520  LB=1142.000  UB=1362  gap=19.26%  cols=174  +33  a=0.70
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+20:45:11 it  14  t=  60.1s  z_RMP=1362.000  Phi=-3364.544  LB=1142.000  UB=1362  gap=19.26%  cols=193  +19  a=0.70
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+20:45:14 it  15  t=  62.8s  z_RMP=1362.000  Phi=-9140.820  LB=1142.000  UB=1362  gap=19.26%  cols=219  +26  a=0.70
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+20:45:17 it  16  t=  65.7s  z_RMP=1348.476  Phi=-117.280  LB=1142.000  UB=1362  gap=19.26%  cols=233  +14  a=0.70
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+20:45:19 it  17  t=  68.2s  z_RMP=1333.108  Phi=-44.323  LB=1142.000  UB=1362  gap=19.26%  cols=269  +36  a=0.70
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+20:45:21 it  18  t=  70.5s  z_RMP=1293.266  Phi=-352.568  LB=1142.000  UB=1362  gap=19.26%  cols=289  +20  a=0.70
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+20:45:26 it  19  t=  75.0s  z_RMP=1254.769  Phi=222.619  LB=1142.000  UB=1362  gap=19.26%  cols=324  +35  a=0.70
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+20:45:28 it  20  t=  77.5s  z_RMP=1194.243  Phi=221.929  LB=1142.000  UB=1362  gap=19.26%  cols=355  +31  a=0.70
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+20:45:32 it  21  t=  81.5s  z_RMP=1160.375  Phi=283.198  LB=1142.000  UB=1362  gap=19.26%  cols=399  +44  a=0.70
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+20:45:38 it  22  t=  87.3s  z_RMP=1142.000  Phi=941.800  LB=1142.000  UB=1362  gap=19.26%  cols=399  +0  a=0.60 (misprice)
+20:45:39   LNS jobs: 1362 -> 1360
+20:45:40   final UB 1360
+CG: LB 1142.0 Lagr 1142.0 HT 1142 UB 1360 it 22 cols 399 status lp_optimal t 89
+CP-SAT: FEASIBLE UB 1275 LB 1143 t 240
+=== cpl_c15_n25_s3 m 20 ops 375 {'ops': 375, 'cells': 15, 'machines': 20, 'transitions': 350, 'ub_dispatch': 1950, 'workload_lb': 1514, 'path_lb': 1005, 'ratio_workload': 0.776, 'ratio_path': 0.515}
+20:49:41 init: dispatch EST-MWR UB=1950  gamma_HT=1562  (energetic 1562)
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+20:49:55   LNS cell0: 1950 -> 1940
+20:49:55   LNS cell1: 1940 -> 1903
+20:49:55   LNS cell2: 1903 -> 1894
+20:49:55   LNS cell6: 1894 -> 1887
+20:49:55   LNS cell8: 1887 -> 1886
+20:49:56   LNS cell13: 1886 -> 1880
+20:49:56   LNS jobs: 1880 -> 1836
+20:49:57   LNS jobs: 1836 -> 1776
+20:50:00   LNS jobs: 1776 -> 1716
+20:50:01   LNS jobs: 1716 -> 1696
+20:50:05   LNS jobs: 1696 -> 1651
+20:50:06   LNS jobs: 1651 -> 1618
+20:50:07   LNS cell4: 1618 -> 1617
+20:50:07   LNS jobs: 1617 -> 1603
+20:50:08   LNS jobs: 1603 -> 1601
+20:50:13   LNS jobs: 1601 -> 1582
+20:50:13   LNS jobs: 1582 -> 1579
+20:50:15   LNS jobs: 1579 -> 1574
+20:50:15   UB improved to 1574
+20:50:15 it   1  t=  34.6s  z_RMP=1950.000  Phi=966.676  LB=1562.000  UB=1574  gap=0.77%  cols=33  +3  a=0.70
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+20:50:29 it   2  t=  48.8s  z_RMP=1574.000  Phi=448.347  LB=1562.000  UB=1574  gap=0.77%  cols=36  +3  a=0.70
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+20:50:42 it   3  t=  62.2s  z_RMP=1574.000  Phi=-540.024  LB=1562.000  UB=1574  gap=0.77%  cols=42  +6  a=0.70
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+20:50:52 it   4  t=  71.5s  z_RMP=1574.000  Phi=1155.947  LB=1562.000  UB=1574  gap=0.77%  cols=43  +1  a=0.70
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+20:51:01 it   5  t=  81.3s  z_RMP=1574.000  Phi=1079.463  LB=1562.000  UB=1574  gap=0.77%  cols=45  +2  a=0.70
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+20:51:10 it   6  t=  89.8s  z_RMP=1574.000  Phi=-8785.866  LB=1562.000  UB=1574  gap=0.77%  cols=49  +4  a=0.70
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+20:51:19 it   7  t=  99.0s  z_RMP=1574.000  Phi=1269.983  LB=1562.000  UB=1574  gap=0.77%  cols=53  +4  a=0.70
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+20:51:28 it   8  t= 107.9s  z_RMP=1574.000  Phi=1046.588  LB=1562.000  UB=1574  gap=0.77%  cols=65  +12  a=0.70
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+20:51:37 it   9  t= 117.4s  z_RMP=1574.000  Phi=995.615  LB=1562.000  UB=1574  gap=0.77%  cols=72  +7  a=0.70
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+20:51:46 it  10  t= 125.9s  z_RMP=1574.000  Phi=747.660  LB=1562.000  UB=1574  gap=0.77%  cols=86  +14  a=0.70
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+20:51:56   LNS jobs: 1574 -> 1567
+20:51:57   LNS jobs: 1567 -> 1564
+20:51:57   LNS jobs: 1564 -> 1562
+20:51:58   UB improved to 1562
+20:51:58 it  11  t= 138.3s  z_RMP=1574.000  Phi=610.289  LB=1562.000  UB=1562  gap=0.00%  cols=120  +19  a=0.70
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+20:52:14 it  12  t= 153.8s  z_RMP=1562.000  Phi=1357.836  LB=1562.000  UB=1562  gap=0.00%  cols=122  +2  a=0.70
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+20:52:22 it  13  t= 161.9s  z_RMP=1562.000  Phi=1419.085  LB=1562.000  UB=1562  gap=0.00%  cols=124  +2  a=0.70
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+20:52:45 it  14  t= 185.1s  z_RMP=1562.000  Phi=1461.960  LB=1562.000  UB=1562  gap=0.00%  cols=124  +0  a=0.60 (misprice)
+CG: LB 1562.0 Lagr 1562.0 HT 1562 UB 1562 it 14 cols 124 status lp_optimal t 186
+CP-SAT: OPTIMAL UB 1562 LB 1562 t 14
+=== cpl_c20_n30_s4 m 34 ops 600 {'ops': 600, 'cells': 20, 'machines': 34, 'transitions': 570, 'ub_dispatch': 2124, 'workload_lb': 1872, 'path_lb': 1232, 'ratio_workload': 0.881, 'ratio_path': 0.58}
+20:53:01 init: dispatch EST UB=2124  gamma_HT=1896  (energetic 1896)
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+20:53:11   LNS cell8: 2124 -> 2107
+20:53:12   LNS cell9: 2107 -> 2092
+20:53:12   LNS cell17: 2092 -> 2091
+20:53:13   LNS cell18: 2091 -> 2037
+20:53:18   LNS jobs: 2037 -> 1954
+20:53:19   LNS jobs: 1954 -> 1944
+20:53:19   LNS cell11: 1944 -> 1941
+20:53:20   LNS jobs: 1941 -> 1938
+20:53:20   LNS cells5-8: 1938 -> 1936
+20:53:21   LNS jobs: 1936 -> 1923
+20:53:22   LNS cell9: 1923 -> 1919
+20:53:22   LNS jobs: 1919 -> 1897
+20:53:23   LNS jobs: 1897 -> 1896
+20:53:24   UB improved to 1896
+20:53:24 it   1  t=  24.0s  z_RMP=2124.000  Phi=974.000  LB=1896.000  UB=1896  gap=0.00%  cols=43  +3  a=0.70
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+Running HiGHS 1.12.0 (git hash: 755a8e02): Copyright (c) 2025 HiGHS under MIT licence terms
+20:53:59 it   2  t=  58.9s  z_RMP=1896.000  Phi=1250.600  LB=1896.000  UB=1896  gap=0.00%  cols=43  +0  a=0.60 (misprice)
+CG: LB 1896.0 Lagr 1896.0 HT 1896 UB 1896 it 2 cols 43 status lp_optimal t 60
+CP-SAT: OPTIMAL UB 1896 LB 1896 t 18
