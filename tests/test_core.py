@@ -204,3 +204,21 @@ def test_strong_duality_at_termination():
         assert exact_all and added == 0
         assert abs(phi - r.z_rmp) < 1e-3, (phi, r.z_rmp)
         cg.close()
+
+
+def test_destructive_bound_valid():
+    """Propagation/shaving never exceeds the optimum and never refutes the
+    optimal makespan (flexible instances with distinct durations per machine)."""
+    from mcfjsp.propagation import destructive_bound, infeasible_T
+    for seed in range(4):
+        inst = generate(n_cells=3, machines_per_cell=(1, 3), n_jobs=7, ops_per_job=(2, 5), proc_range=(1, 15),
+                        flexibility=0.7, revisit_prob=0.3, seed=seed)
+        h, q = heads_tails(inst)
+        sch, _, _ = best_dispatch(inst, q)
+        opt = cpsat_plant(inst, sch.makespan, time_limit=30, threads=2)
+        assert opt.status == "OPTIMAL"
+        ht = head_tail_bounds(inst, sch.makespan, cp_time=2, threads=2)["gamma_ht"]
+        r = destructive_bound(inst, ht, sch.makespan, cell_time=2, threads=2)
+        assert ht <= r["lb"] <= opt.ub
+        inf, _ = infeasible_T(inst, opt.ub, h, q, cell_time=2, threads=2)
+        assert not inf

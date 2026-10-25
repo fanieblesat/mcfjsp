@@ -83,6 +83,8 @@ def main():
     ap.add_argument("--workers", type=int, default=3, help="process pool over cells for pricing")
     ap.add_argument("--preemptive-max-ops", type=int, default=400, help="skip the preemptive HT bound above this size")
     ap.add_argument("--ti-max-ops", type=int, default=1000, help="skip the compact TI-LP diagnostic above this size")
+    ap.add_argument("--shave-time", type=float, default=0.0,
+                    help="time budget (s) for the destructive bound with shaving (propagation.py); 0 = off")
     ap.add_argument("--skip-sg", action="store_true")
     ap.add_argument("--skip-cpsat", action="store_true")
     ap.add_argument("--gurobi", action="store_true")
@@ -155,6 +157,12 @@ def main():
                    cg_iters=r_cg.iterations, cg_cols=r_cg.n_columns, cg_exact=r_cg.exact_calls, t_cg=round(r_cg.time, 1),
                    cg_status=r_cg.status)
         hist[inst.name] = {"cg": r_cg.history}
+        if args.shave_time > 0:
+            from mcfjsp.propagation import destructive_bound
+            r_d = destructive_bound(inst, int(r_cg.lb), r_cg.ub, shaving=True, sweeps=2, cell_time=args.cp_time,
+                                    threads=args.threads, time_budget=args.shave_time, log=log)
+            row.update(lb_destructive=r_d["lb"], t_destructive=round(r_d["time"], 1), destructive_tests=r_d["tests"])
+            log.info("destructive bound (shaving): %d [%d tests, %.1fs]", r_d["lb"], r_d["tests"], r_d["time"])
         log.info("CG: LB %.3f (Lagr %.3f, HT %d) UB %d gap %.2f%% [%s, %.1fs, %d it, %d cols]", r_cg.lb, r_cg.lb_cg,
                  r_cg.gamma_ht, r_cg.ub, 100 * r_cg.gap, r_cg.status, r_cg.time, r_cg.iterations, r_cg.n_columns)
         if not args.skip_sg:
@@ -176,7 +184,7 @@ def main():
                 log.warning("Gurobi baseline skipped: %s", e)
                 row.update(gurobi_status=f"skipped: {e}")
         best_ub = min(x for x in [row.get("ub_cg"), row.get("ub_cpsat"), row.get("ub_gurobi"), row["ub_dispatch"]] if x)
-        best_lb_ours = row["lb_cg"]
+        best_lb_ours = max(row["lb_cg"], row.get("lb_destructive", 0))
         row["best_ub"] = best_ub
         row["cert_gap_ours"] = round(100 * (best_ub - best_lb_ours) / best_lb_ours, 2) if best_lb_ours > 0 else None
         if "lb_cpsat" in row and row["lb_cpsat"] > 0:

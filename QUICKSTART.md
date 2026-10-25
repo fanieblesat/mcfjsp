@@ -8,7 +8,7 @@ cd mcfjsp
 py -3.12 -m venv .venv
 .venv\Scripts\activate
 pip install -r requirements.txt
-py -m pytest tests -q          # expect: 12 passed (~15 s)
+py -m pytest tests -q          # expect: 13 passed (~25 s)
 ```
 
 Gurobi (university/personal laptop only): `pip install gurobipy`, licence
@@ -58,7 +58,15 @@ py scripts/pilot.py --coupled n_cells=40,machines_per_cell=1,n_jobs=40,visits_pe
 ```
 Check the `structure:` line: coupling-dominated means workload/UB and path/UB both well below 1.
 
-## 6. Parallel pricing
+## 6. Long upper-bound runs and the destructive bound (v0.2.2)
+
+```powershell
+py scripts/pilot.py --instances data/generated/cpl_c40_n40_s1.json data/generated/cpl_c60_n60_s2.json `
+   --time 3600 --threads 6 --workers 3 --cp-time 15 --lns-time 600 --skip-sg --ti-max-ops 0 --shave-time 1800 `
+   --out results/ub_long 2>&1 | Tee-Object logs/ub_long.log
+```
+
+## 7. Parallel pricing
 
 `--workers K` (pilot flag to add; `CGParams(n_workers=K)`) prices the cells
 in K processes. Use K = number of cells (≤ cores) and `--threads` = cores so

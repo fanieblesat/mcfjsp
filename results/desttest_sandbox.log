@@ -1,0 +1,22 @@
+=== c40_n40 ops 1600 HT 2820 UB 3333
+16:05:29   destructive: T=3076 -> open (not proven) [108.3s]
+16:09:38   destructive: T=2947 -> open (not proven) [357.0s]
+16:13:40   destructive: T=2883 -> open (not proven) [598.7s]
+16:15:24   destructive: T=2851 -> infeasible (propagation: cell 29: energy) [703.5s]
+16:19:31   destructive: T=2867 -> open (not proven) [949.9s]
+16:22:57   destructive: T=2859 -> open (not proven) [1156.4s]
+16:24:43   destructive: T=2855 -> infeasible (propagation: cell 29: energy) [1262.3s]
+16:28:08   destructive: T=2857 -> open (not proven) [1466.8s]
+16:29:50   destructive: T=2856 -> infeasible (propagation: cell 14: energy) [1568.9s]
+c40_n40: destructive 2857 (1569s, 9 tests)  HT 2820  UB 3333  gap HT 18.2% -> 16.7%
+=== c60_n60 ops 3600 HT 3828 UB 5244
+16:43:29   destructive: T=4535 -> open (not proven) [819.3s]
+16:54:28   destructive: T=4181 -> open (not proven) [1478.3s]
+17:13:07   destructive: T=4004 -> open (not proven) [2597.1s]
+17:31:11   destructive: T=3915 -> open (not proven) [3681.5s]
+17:47:23   destructive: T=3871 -> open (not proven) [4652.8s]
+17:53:00   destructive: T=3849 -> infeasible (propagation: cell 44: energy) [4990.3s]
+17:58:03   destructive: T=3860 -> infeasible (propagation: cell 44: energy) [5293.2s]
+17:59:51   destructive: T=3865 -> open (not proven) [5400.7s]
+c60_n60: destructive 3861 (5401s, 8 tests)  HT 3828  UB 5244  gap HT 37.0% -> 35.8%
+=== c50_n80 ops 4000 HT 4970 UB 5226

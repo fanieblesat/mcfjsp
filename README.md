@@ -123,6 +123,18 @@ master uses GLOP (duals).
   termination. The head-tail bound is therefore the certificate; CG supplies
   the prices (coordination) and primal columns.
 
+## v0.2.2 (2026-10-23)
+
+* `propagation.py` + `kernels.py` (numba): start-time windows, worklist
+  propagation (job precedence, energetic/cumulative reasoning per cell,
+  edge-finding per machine), global shaving (Martin-Shmoys / Carlier-Pinson)
+  and the destructive bound (binary search on T; every proven-infeasible T
+  gives the valid bound T+1). Cell-local shaving with window exchange
+  (message passing) is included for comparison; it retains little of the
+  global gain. Pilot flag `--shave-time S` records `lb_destructive`.
+  Measured: cpl_c15_n15 1142 -> 1209 (opt 1275) in 44 s; cpl_c40_n40
+  2820 -> 2857; cpl_c60_n60 3828 -> 3861 (2 cores).
+
 ## Known limitations / to do
 
 * Learned PPO+GNN pricer: interface in `pricers.py`; implementation pending
