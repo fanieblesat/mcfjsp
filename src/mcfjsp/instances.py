@@ -185,3 +185,24 @@ def read_fjsp_text(path: str, name: Optional[str] = None, machine_base: int = 0)
     # single cell (the original FJSP); use partition.apply_partition to split.
     return Instance(name or path, n_machines, [0] * n_machines, release, job_ops,
                     op_job, op_pos, op_cell, op_proc, meta={"source": path, "cells": 1})
+
+
+def read_jsp_taillard(path: str, name: Optional[str] = None) -> Instance:
+    """Classical job shop in Taillard/JSPLIB format (first line: n_jobs
+    n_machines; then one line per job with (machine, duration) pairs).  One
+    cell per machine: the plant-level problem is exactly J||Cmax, so published
+    bounds calibrate the cell-decomposed bound engine."""
+    with open(path) as f:
+        tokens = f.read().split()
+    it = iter(tokens)
+    n_jobs = int(next(it)); n_machines = int(next(it))
+    release, job_ops, op_job, op_pos, op_cell, op_proc = [], [], [], [], [], []
+    for j in range(n_jobs):
+        ops = []
+        for k in range(n_machines):
+            i = int(next(it)); p = int(next(it))
+            a = len(op_job); ops.append(a)
+            op_job.append(j); op_pos.append(k); op_cell.append(i); op_proc.append({i: p})
+        job_ops.append(ops); release.append(0)
+    return Instance(name or path, n_machines, list(range(n_machines)), release, job_ops,
+                    op_job, op_pos, op_cell, op_proc, meta={"source": path, "cells": n_machines, "format": "taillard"})

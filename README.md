@@ -135,6 +135,49 @@ master uses GLOP (duals).
   Measured: cpl_c15_n15 1142 -> 1209 (opt 1275) in 44 s; cpl_c40_n40
   2820 -> 2857; cpl_c60_n60 3828 -> 3861 (2 cores).
 
+## v0.2.3 (2026-10-25)
+
+* Taillard job-shop reader (`read_jsp_taillard`, one cell per machine) and
+  `scripts/calibrate_taillard.py`: the bound engine against published
+  bounds. Sandbox result (2 cores, <= 3 min per instance,
+  `results/calibration_taillard_sandbox.csv`): destructive bound equals the
+  best known lower bound on ta43 and ta45, and is 1.6-2.8 % below it on
+  ta41/ta47/ta50 (best known bounds from 48-worker CP-SAT runs of up to
+  50,000 s, arXiv:2504.16106); CP-SAT with 600 s / 2 threads stays at the
+  head-tail value.
+* Long upper-bound runs (results/ub_long, 1 h / 6 threads): cpl_c40_n40 UB
+  3333 -> 3307, cpl_c60_n60 5244 -> 5003; certified gaps 15.8 % / 30.7 %.
+  Conclusion recorded for the paper: on large square coupling-dominated
+  plants the residual gap is intrinsic (bound at the state of the art,
+  primal side stagnating), reported as the method's boundary.
+
+## v0.3.0 (2026-10-26) — stochastic layer
+
+* `simulator.py`: executions return the realized schedule (`Realized`);
+  scenarios carry failure/repair paths (`sample_scenario_paths`);
+  `conditional_expectation` E[D | F_e] (verified as a martingale).
+* `penalty.py` (Section 5.4, own-duration penalties, start time clipped at
+  T_bar so that the inner problem is bounded): penalized CP-SAT bound with a
+  valid integer rounding, window-based bound for large instances, fitting by
+  projected supergradient ascent with line search on training scenarios,
+  evaluation on independent scenarios with paired gaps (penalty = control
+  variate).  Measured: +3-5 % on the mean bound and ~+10 % on the lower
+  confidence bound where machine choice is informative (full flexibility);
+  nothing under rigid routings; on the counterexample instance the
+  machine-choice component lifts the PI bound 2.50 -> 3.21 (reactive 3.79).
+* `penalty2.py` (extension): revealed-duration and pre-start penalties for
+  pairs of operations (sequencing information).  Valid and zero-mean, but
+  constant coefficients are neutralised by zero-cost reorderings (the
+  clairvoyant turns the charge into a reward); documented as a negative
+  result -- state-dependent penalties would be needed.
+* `scripts/stochastic_campaign.py`: planning, mean-value certificate for
+  static policies (head-tail + destructive on floor(p~)), PI bounds
+  (head-tail; CP-SAT up to --cp-max-ops), penalized bound, four policies,
+  CVaR95, paired certified gaps -> CSV/JSON.
+* Finding from the smoke test: greedy reactive rules can be WORSE than
+  static execution under failures; a re-planning reactive policy is
+  required for a meaningful value-of-reactivity comparison (to do).
+
 ## Known limitations / to do
 
 * Learned PPO+GNN pricer: interface in `pricers.py`; implementation pending

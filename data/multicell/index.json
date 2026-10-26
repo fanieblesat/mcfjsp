@@ -1,0 +1,272 @@
+[
+ {
+  "name": "mk01_c2",
+  "base": "mk01",
+  "cells": 2,
+  "ops": 55,
+  "machines": 6,
+  "transitions": 30,
+  "file": "multicell/mk01_c2.json"
+ },
+ {
+  "name": "mk01_c4",
+  "base": "mk01",
+  "cells": 4,
+  "ops": 55,
+  "machines": 6,
+  "transitions": 37,
+  "file": "multicell/mk01_c4.json"
+ },
+ {
+  "name": "mk02_c2",
+  "base": "mk02",
+  "cells": 2,
+  "ops": 58,
+  "machines": 6,
+  "transitions": 25,
+  "file": "multicell/mk02_c2.json"
+ },
+ {
+  "name": "mk02_c4",
+  "base": "mk02",
+  "cells": 4,
+  "ops": 58,
+  "machines": 6,
+  "transitions": 32,
+  "file": "multicell/mk02_c4.json"
+ },
+ {
+  "name": "mk03_c2",
+  "base": "mk03",
+  "cells": 2,
+  "ops": 150,
+  "machines": 8,
+  "transitions": 74,
+  "file": "multicell/mk03_c2.json"
+ },
+ {
+  "name": "mk03_c4",
+  "base": "mk03",
+  "cells": 4,
+  "ops": 150,
+  "machines": 8,
+  "transitions": 113,
+  "file": "multicell/mk03_c4.json"
+ },
+ {
+  "name": "mk04_c2",
+  "base": "mk04",
+  "cells": 2,
+  "ops": 90,
+  "machines": 8,
+  "transitions": 25,
+  "file": "multicell/mk04_c2.json"
+ },
+ {
+  "name": "mk04_c4",
+  "base": "mk04",
+  "cells": 4,
+  "ops": 90,
+  "machines": 8,
+  "transitions": 52,
+  "file": "multicell/mk04_c4.json"
+ },
+ {
+  "name": "mk05_c2",
+  "base": "mk05",
+  "cells": 2,
+  "ops": 106,
+  "machines": 4,
+  "transitions": 50,
+  "file": "multicell/mk05_c2.json"
+ },
+ {
+  "name": "mk05_c4",
+  "base": "mk05",
+  "cells": 4,
+  "ops": 106,
+  "machines": 4,
+  "transitions": 77,
+  "file": "multicell/mk05_c4.json"
+ },
+ {
+  "name": "mk06_c2",
+  "base": "mk06",
+  "cells": 2,
+  "ops": 150,
+  "machines": 10,
+  "transitions": 65,
+  "file": "multicell/mk06_c2.json"
+ },
+ {
+  "name": "mk06_c4",
+  "base": "mk06",
+  "cells": 4,
+  "ops": 150,
+  "machines": 10,
+  "transitions": 98,
+  "file": "multicell/mk06_c4.json"
+ },
+ {
+  "name": "mk07_c2",
+  "base": "mk07",
+  "cells": 2,
+  "ops": 100,
+  "machines": 5,
+  "transitions": 37,
+  "file": "multicell/mk07_c2.json"
+ },
+ {
+  "name": "mk07_c4",
+  "base": "mk07",
+  "cells": 4,
+  "ops": 100,
+  "machines": 5,
+  "transitions": 61,
+  "file": "multicell/mk07_c4.json"
+ },
+ {
+  "name": "mk08_c2",
+  "base": "mk08",
+  "cells": 2,
+  "ops": 225,
+  "machines": 10,
+  "transitions": 104,
+  "file": "multicell/mk08_c2.json"
+ },
+ {
+  "name": "mk08_c4",
+  "base": "mk08",
+  "cells": 4,
+  "ops": 225,
+  "machines": 10,
+  "transitions": 159,
+  "file": "multicell/mk08_c4.json"
+ },
+ {
+  "name": "mk09_c2",
+  "base": "mk09",
+  "cells": 2,
+  "ops": 240,
+  "machines": 10,
+  "transitions": 111,
+  "file": "multicell/mk09_c2.json"
+ },
+ {
+  "name": "mk09_c4",
+  "base": "mk09",
+  "cells": 4,
+  "ops": 240,
+  "machines": 10,
+  "transitions": 162,
+  "file": "multicell/mk09_c4.json"
+ },
+ {
+  "name": "mk10_c2",
+  "base": "mk10",
+  "cells": 2,
+  "ops": 240,
+  "machines": 15,
+  "transitions": 118,
+  "file": "multicell/mk10_c2.json"
+ },
+ {
+  "name": "mk10_c4",
+  "base": "mk10",
+  "cells": 4,
+  "ops": 240,
+  "machines": 15,
+  "transitions": 145,
+  "file": "multicell/mk10_c4.json"
+ },
+ {
+  "name": "mk11_c2",
+  "base": "mk11",
+  "cells": 2,
+  "ops": 179,
+  "machines": 5,
+  "transitions": 61,
+  "file": "multicell/mk11_c2.json"
+ },
+ {
+  "name": "mk11_c4",
+  "base": "mk11",
+  "cells": 4,
+  "ops": 179,
+  "machines": 5,
+  "transitions": 101,
+  "file": "multicell/mk11_c4.json"
+ },
+ {
+  "name": "mk12_c2",
+  "base": "mk12",
+  "cells": 2,
+  "ops": 193,
+  "machines": 10,
+  "transitions": 76,
+  "file": "multicell/mk12_c2.json"
+ },
+ {
+  "name": "mk12_c4",
+  "base": "mk12",
+  "cells": 4,
+  "ops": 193,
+  "machines": 10,
+  "transitions": 128,
+  "file": "multicell/mk12_c4.json"
+ },
+ {
+  "name": "mk13_c2",
+  "base": "mk13",
+  "cells": 2,
+  "ops": 231,
+  "machines": 10,
+  "transitions": 111,
+  "file": "multicell/mk13_c2.json"
+ },
+ {
+  "name": "mk13_c4",
+  "base": "mk13",
+  "cells": 4,
+  "ops": 231,
+  "machines": 10,
+  "transitions": 143,
+  "file": "multicell/mk13_c4.json"
+ },
+ {
+  "name": "mk14_c2",
+  "base": "mk14",
+  "cells": 2,
+  "ops": 277,
+  "machines": 15,
+  "transitions": 128,
+  "file": "multicell/mk14_c2.json"
+ },
+ {
+  "name": "mk14_c4",
+  "base": "mk14",
+  "cells": 4,
+  "ops": 277,
+  "machines": 15,
+  "transitions": 187,
+  "file": "multicell/mk14_c4.json"
+ },
+ {
+  "name": "mk15_c2",
+  "base": "mk15",
+  "cells": 2,
+  "ops": 284,
+  "machines": 15,
+  "transitions": 127,
+  "file": "multicell/mk15_c2.json"
+ },
+ {
+  "name": "mk15_c4",
+  "base": "mk15",
+  "cells": 4,
+  "ops": 284,
+  "machines": 15,
+  "transitions": 199,
+  "file": "multicell/mk15_c4.json"
+ }
+]

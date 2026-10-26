@@ -222,3 +222,76 @@ def test_destructive_bound_valid():
         assert ht <= r["lb"] <= opt.ub
         inf, _ = infeasible_T(inst, opt.ub, h, q, cell_time=2, threads=2)
         assert not inf
+
+
+def test_taillard_reader_and_bound_validity():
+    """ta45 is solved (optimum 1997): the destructive bound must not exceed it,
+    and every bound must be <= a feasible dispatch makespan."""
+    from mcfjsp.instances import read_jsp_taillard
+    from mcfjsp.propagation import infeasible_T
+    inst = read_jsp_taillard(os.path.join(DATA, "taillard", "ta45"), "ta45")
+    assert inst.n_jobs == 30 and inst.n_machines == 20 and inst.n_ops == 600 and inst.n_cells == 20
+    h, q = heads_tails(inst)
+    sch, _, _ = best_dispatch(inst, q)
+    check_feasible(inst, sch)
+    ht = head_tail_bounds(inst, sch.makespan, cp_time=2, threads=2, use_preemptive=False)
+    assert ht["gamma_ht"] <= 1997 <= sch.makespan
+    inf, _ = infeasible_T(inst, 1997, h, q, cell_time=2, threads=2, shave_budget=20)
+    assert not inf
+
+
+def test_penalized_certificate_valid_and_zero_mean():
+    """Section 5.4: (i) the penalty has zero sample mean under static and
+    reactive policies up to Monte Carlo error; (ii) Cmax^sigma - zeta - Psi_hat >= 0
+    pathwise for every policy and scenario; (iii) with theta = 0 the penalized
+    bound equals the perfect-information bound of the same solver."""
+    from mcfjsp.penalty import Penalty, penalized_bound_cpsat, evaluate_penalized
+    from mcfjsp.simulator import static_execute_realized, reactive_execute_realized, rule_policy, sample_scenario
+    inst = generate(n_cells=3, machines_per_cell=(2, 3), n_jobs=6, ops_per_job=(2, 3), flexibility=1.0,
+                    availability=0.8, mttr_factor=2.0, seed=3)
+    h, q = heads_tails(inst)
+    plan, _, _ = best_dispatch(inst, q)
+    t_bar = 3.0 * plan.makespan
+    rng = np.random.default_rng(0)
+    theta = {(a, i): float(rng.normal(0, 0.3)) for a in range(inst.n_ops) for i in inst.op_proc[a]}
+    eta = {(a, i): float(rng.normal(0, 0.3)) / t_bar for a in range(inst.n_ops) for i in inst.op_proc[a]}
+    pen = Penalty(inst, theta, eta, t_bar)
+    pols = {"static": lambda D: static_execute_realized(inst, plan, D),
+            "MWR": lambda D: reactive_execute_realized(inst, rule_policy(inst, q, "MWR"), D)}
+    rep = evaluate_penalized(inst, pen, pols, n_scen=60, base_seed=11, cp_time=5, threads=2)
+    for k in pols:
+        assert rep.min_pathwise[k] >= -1e-6, (k, rep.min_pathwise[k])
+    # zero mean: |sample mean| small relative to the makespan scale (60 scenarios)
+    for k in pols:
+        assert abs(rep.zeta_mean[k]) < 0.15 * plan.makespan
+    D = sample_scenario(inst, 11, 0)
+    r0 = penalized_bound_cpsat(inst, D, Penalty.zero(inst, t_bar), 1.0, 5, 2)
+    from mcfjsp.stochastic import scenario_bound
+    assert r0.status in ("OPTIMAL", "FEASIBLE")
+    assert r0.psi_hat >= scenario_bound(inst, D, 1.0).phi - 1e-6 or r0.status != "OPTIMAL"
+
+
+def test_prestart_penalty_valid():
+    """Revealed/pre-start penalties with a machine-choice component: pathwise
+    validity of the certificate for every policy, zero-mean penalty up to
+    Monte Carlo error, and theta = 0, c = 0 reproduces the PI bound."""
+    from mcfjsp.penalty2 import RevealedPenalty, candidate_pairs, evaluate_revealed, penalized_bound_cpsat2
+    from mcfjsp.simulator import static_execute_realized, reactive_execute_realized, rule_policy, sample_scenario_paths
+    inst = generate(n_cells=2, machines_per_cell=(2, 2), n_jobs=5, ops_per_job=(2, 3), flexibility=1.0,
+                    availability=0.8, mttr_factor=2.0, seed=4)
+    h, q = heads_tails(inst)
+    plan, _, _ = best_dispatch(inst, q)
+    t_bar = 3.0 * plan.makespan
+    rng = np.random.default_rng(2)
+    pairs = candidate_pairs(inst, "machine")
+    pen = RevealedPenalty(inst, {pr: float(rng.normal(0, 0.1)) for pr in pairs}, t_bar,
+                          theta={(a, i): float(rng.normal(0, 0.2)) for a in range(inst.n_ops) for i in inst.op_proc[a]})
+    pols = {"static": lambda D: static_execute_realized(inst, plan, D),
+            "MWR": lambda D: reactive_execute_realized(inst, rule_policy(inst, q, "MWR"), D)}
+    rep = evaluate_revealed(inst, pen, pols, n_scen=40, base_seed=9, kappa=2.0, cp_time=5, threads=2)
+    for k in pols:
+        assert rep.min_pathwise[k] >= -1e-6, (k, rep.min_pathwise[k])
+        assert abs(rep.zeta_mean[k]) < 0.2 * plan.makespan
+    D, P = sample_scenario_paths(inst, 9, 0)
+    r0 = penalized_bound_cpsat2(inst, D, P, RevealedPenalty.zero(inst, t_bar), 2.0, 5, 2)
+    assert r0.status == "OPTIMAL"

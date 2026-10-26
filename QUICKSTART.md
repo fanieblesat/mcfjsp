@@ -8,7 +8,7 @@ cd mcfjsp
 py -3.12 -m venv .venv
 .venv\Scripts\activate
 pip install -r requirements.txt
-py -m pytest tests -q          # expect: 13 passed (~25 s)
+py -m pytest tests -q          # expect: 16 passed (~60 s)
 ```
 
 Gurobi (university/personal laptop only): `pip install gurobipy`, licence
@@ -66,7 +66,33 @@ py scripts/pilot.py --instances data/generated/cpl_c40_n40_s1.json data/generate
    --out results/ub_long 2>&1 | Tee-Object logs/ub_long.log
 ```
 
-## 7. Parallel pricing
+## 7. Taillard calibration (v0.2.3)
+
+```powershell
+python scripts/calibrate_taillard.py ta41 ta42 ta43 ta44 ta45 ta46 ta47 ta48 ta49 ta50 --threads 6 --shave-time 1500 `
+   --cpsat-time 600 --out results/calibration_taillard 2>&1 | Tee-Object logs/calibration_taillard.log
+```
+
+## 8. Stochastic campaign (v0.3.0)
+
+Smoke test (~15 min), then the grid:
+
+```powershell
+python scripts/stochastic_campaign.py --gen n_cells=4,machines_per_cell=2-3,n_jobs=12,ops_per_job=2-4,flexibility=0.8,availability=0.9,mttr_factor=2,seed=1 `
+   --scenarios 200 --train 40 --kappa 2 --time 120 --threads 6 --cp-time 10 --out results/stoch_smoke 2>&1 | Tee-Object logs/stoch_smoke.log
+
+python scripts/stochastic_campaign.py `
+   --gen n_cells=4,machines_per_cell=2-3,n_jobs=12,ops_per_job=2-4,flexibility=0.8,availability=0.95,mttr_factor=2,seed=1 `
+         n_cells=4,machines_per_cell=2-3,n_jobs=12,ops_per_job=2-4,flexibility=0.8,availability=0.85,mttr_factor=2,seed=1 `
+         n_cells=4,machines_per_cell=2-3,n_jobs=12,ops_per_job=2-4,flexibility=0.3,availability=0.85,mttr_factor=2,seed=1 `
+         n_cells=5,machines_per_cell=2-3,n_jobs=40,ops_per_job=3-5,flexibility=0.6,availability=0.9,mttr_factor=2,seed=2 `
+         n_cells=8,machines_per_cell=2-4,n_jobs=100,ops_per_job=3-6,flexibility=0.5,availability=0.9,mttr_factor=2,seed=3 `
+   --scenarios 200 --train 40 --kappa 2 --time 300 --threads 6 --cp-time 10 --cp-max-ops 400 --out results/stoch_grid 2>&1 | Tee-Object logs/stoch_grid.log
+```
+Columns: `pi_ht_*`, `pi_cp_*`, `pen_*` (bounds, mean and 95 % LCB), per policy
+`<policy>_mean/_cvar95/_gap_pi_*/_cert/_gap_cert_pct/_gap_pen_*`.
+
+## 9. Parallel pricing
 
 `--workers K` (pilot flag to add; `CGParams(n_workers=K)`) prices the cells
 in K processes. Use K = number of cells (≤ cores) and `--threads` = cores so

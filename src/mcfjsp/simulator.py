@@ -21,7 +21,7 @@ from __future__ import annotations
 
 import heapq
 import math
-from typing import Callable, Dict, List, Optional
+from typing import Callable, Dict, List, Optional, Tuple
 
 import numpy as np
 
@@ -32,20 +32,62 @@ from .schedule import Schedule, semi_active
 Scenario = Dict[int, Dict[int, float]]   # a -> {i -> D_{a,i}}
 
 
-def sample_scenario(inst: Instance, base_seed: int, scen_index: int) -> Scenario:
-    D: Scenario = {}
+Path = Tuple[Tuple[float, ...], Tuple[float, ...]]   # (failure epochs in work time, sorted; repair durations)
+Paths = Dict[int, Dict[int, Path]]
+
+
+def sample_scenario_paths(inst: Instance, base_seed: int, scen_index: int) -> Tuple[Scenario, Paths]:
+    """Scenario with the failure path of every (a, i): N ~ Poisson(lam p)
+    failures at work-time epochs uniform on [0, p), repairs Exp(mu).
+    D_{a,i} = p + sum of repairs.  The path is what a policy can observe while
+    a runs on i (failure and repair events), and what the conditional
+    expectations of the revealed-duration penalties need."""
+    D: Scenario = {}; P: Paths = {}
     for a in range(inst.n_ops):
-        D[a] = {}
+        D[a] = {}; P[a] = {}
         for i, p in inst.op_proc[a].items():
             lam, mu = inst.lam[i], inst.mu[i]
             if lam <= 0:
-                D[a][i] = float(p)
+                D[a][i] = float(p); P[a][i] = ((), ())
                 continue
             rng = np.random.default_rng([base_seed, scen_index, a, i])
-            n = rng.poisson(lam * p)
-            rep = float(rng.gamma(n, 1.0 / mu)) if n > 0 else 0.0
-            D[a][i] = p + rep
-    return D
+            n = int(rng.poisson(lam * p))
+            if n == 0:
+                D[a][i] = float(p); P[a][i] = ((), ())
+                continue
+            epochs = tuple(sorted(float(x) for x in rng.uniform(0.0, p, n)))
+            reps = tuple(float(x) for x in rng.exponential(1.0 / mu, n))
+            D[a][i] = p + sum(reps); P[a][i] = (epochs, reps)
+    return D, P
+
+
+def sample_scenario(inst: Instance, base_seed: int, scen_index: int) -> Scenario:
+    return sample_scenario_paths(inst, base_seed, scen_index)[0]
+
+
+def conditional_expectation(p: float, lam: float, mu: float, path: Path, e: float) -> float:
+    """E[D | F_e]: expected total occupation time of an operation with nominal
+    duration p on a machine with failure rate lam and repair rate mu, given
+    the failure/repair path observed during the first e time units of its
+    processing (Assumption 1: busy-time failures, Exp repairs, memoryless).
+    For e >= D the value is D itself."""
+    epochs, reps = path
+    inflate = 1.0 + (lam / mu if mu > 0 else 0.0)
+    t = 0.0; w = 0.0           # elapsed time, work done
+    for wk, rk in zip(epochs, reps):
+        run = wk - w            # running segment until the next failure
+        if e < t + run:
+            w_e = w + (e - t)
+            return e + (p - w_e) * inflate
+        t += run; w = wk
+        if e < t + rk:          # under repair at time e
+            return e + (1.0 / mu) + (p - w) * inflate
+        t += rk
+    run = p - w
+    if e < t + run:
+        w_e = w + (e - t)
+        return e + (p - w_e) * inflate
+    return t + run              # completed: D
 
 
 def expected_durations(inst: Instance) -> Dict[int, Dict[int, float]]:
@@ -63,12 +105,27 @@ def round_scenario(inst: Instance, D: Scenario, kappa: float = 1.0) -> Instance:
 
 
 # ---- static execution --------------------------------------------------
+class Realized:
+    """Realized execution of a policy under a scenario: machine, start and
+    completion of every operation (floats), and the makespan.  This is the
+    schedule S^sigma(omega) of Theorem 'PI' / Lemma 'Zero mean'."""
+    __slots__ = ("assign", "start", "comp", "makespan")
+
+    def __init__(self, assign, start, comp):
+        self.assign = list(assign); self.start = list(start); self.comp = list(comp)
+        self.makespan = float(max(comp)) if comp else 0.0
+
+
+def static_execute_realized(inst: Instance, plan: Schedule, D: Scenario) -> Realized:
+    orders = plan.machine_orders(inst)
+    sch = semi_active(inst, plan.assign, orders, durations=D)  # floats are fine here
+    return Realized(sch.assign, sch.start, sch.comp)
+
+
 def static_execute(inst: Instance, plan: Schedule, D: Scenario) -> float:
     """Semi-active execution of a plan's assignment and machine orders with
     realized durations. Returns the realized makespan."""
-    orders = plan.machine_orders(inst)
-    sch = semi_active(inst, plan.assign, orders, durations=D)  # floats are fine here
-    return float(max(sch.comp))
+    return static_execute_realized(inst, plan, D).makespan
 
 
 # ---- reactive execution ------------------------------------------------
@@ -89,6 +146,11 @@ class ReactiveState:
 
 def reactive_execute(inst: Instance, policy: ReactivePolicy, D: Scenario,
                      assign_rule: str = "earliest_nominal") -> float:
+    return reactive_execute_realized(inst, policy, D, assign_rule).makespan
+
+
+def reactive_execute_realized(inst: Instance, policy: ReactivePolicy, D: Scenario,
+                              assign_rule: str = "earliest_nominal") -> Realized:
     """Event-driven list scheduling. At each decision epoch, ready operations
     are considered in priority order; each is started on a *free* eligible
     machine of its cell (the one with the smallest nominal processing time,
@@ -106,6 +168,7 @@ def reactive_execute(inst: Instance, policy: ReactivePolicy, D: Scenario,
         heapq.heappush(events, (t, 0, a, -1))
     done = 0; makespan = 0.0
     ready = set()
+    assign = [-1] * n; start = [0.0] * n; comp = [0.0] * n
     while done < n:
         if not events:
             raise RuntimeError("deadlock in reactive execution")
@@ -116,7 +179,7 @@ def reactive_execute(inst: Instance, policy: ReactivePolicy, D: Scenario,
             if kind == 0:
                 ready.add(a)
             else:
-                state.comp[a] = t; free[i] = True; done += 1; makespan = max(makespan, t)
+                state.comp[a] = t; free[i] = True; done += 1; makespan = max(makespan, t); comp[a] = t
                 s = inst.op_succ[a]
                 if s >= 0:
                     ready.add(s)
@@ -135,10 +198,11 @@ def reactive_execute(inst: Instance, policy: ReactivePolicy, D: Scenario,
                     i = min(cands, key=lambda i: (inst.op_proc[a][i], i))
                 free[i] = False
                 ready.discard(a)
+                assign[a] = i; start[a] = t
                 heapq.heappush(events, (t + D[a][i], 1, a, i))
                 progress = True
                 break
-    return makespan
+    return Realized(assign, start, comp)
 
 
 def plan_order_policy(inst: Instance, plan: Schedule) -> ReactivePolicy:

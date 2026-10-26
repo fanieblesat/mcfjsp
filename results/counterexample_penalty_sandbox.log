@@ -1,0 +1,61 @@
+00:26:47   fit2 it 0: mean Psi_hat = 2.566 (c = 0)
+00:26:49   fit2 it 1: mean Psi_hat = 3.033  step 0.2400
+00:26:50   fit2 it 2: mean Psi_hat = 3.173  step 0.2880
+00:26:53   fit2 it 3: mean Psi_hat = 3.183  step 0.1728
+00:26:55   fit2 it 4: mean Psi_hat = 3.205  step 0.1037
+00:26:58   fit2 it 5: mean Psi_hat = 3.205  step 0.0622
+00:27:00   fit2 it 6: mean Psi_hat = 3.211  step 0.0373
+00:27:04   fit2 it 7: mean Psi_hat = 3.211  step 0.0112
+00:27:05   fit2 it 8: mean Psi_hat = 3.211  step 0.0134
+00:27:07   fit2 it 9: mean Psi_hat = 3.212  step 0.0161
+00:27:14   fit2 it 10: mean Psi_hat = 3.212  step 0.0182 (non-monotone)
+00:27:20   fit2 it 11: mean Psi_hat = 3.212  step 0.0027
+00:27:27   fit2 it 12: mean Psi_hat = 3.212  step 0.0154 (non-monotone)
+00:27:35   fit2 it 13: mean Psi_hat = 3.212  step 0.0143 (non-monotone)
+00:27:41   fit2 it 14: mean Psi_hat = 3.212  step 0.0133 (non-monotone)
+00:27:49   fit2 it 15: mean Psi_hat = 3.212  step 0.0125 (non-monotone)
+theta-only: {('t', 0): 0.5300607133090909}
+00:27:51   fit2 it 0: mean Psi_hat = 3.212 (warm start)
+00:28:01   fit2 it 1: mean Psi_hat = 3.206  step 0.0250 (non-monotone)
+00:28:09   fit2 it 2: mean Psi_hat = 3.210  step 0.0037
+00:28:18   fit2 it 3: mean Psi_hat = 3.210  step 0.0125 (non-monotone)
+00:28:23   fit2 it 4: mean Psi_hat = 3.210  step 0.0037
+00:28:33   fit2 it 5: mean Psi_hat = 3.208  step 0.0083 (non-monotone)
+00:28:41   fit2 it 6: mean Psi_hat = 3.208  step 0.0013
+00:28:44   fit2 it 7: mean Psi_hat = 3.209  step 0.0008
+00:28:49   fit2 it 8: mean Psi_hat = 3.210  step 0.0002
+00:28:53   fit2 it 9: mean Psi_hat = 3.210  step 0.0001
+00:28:58   fit2 it 10: mean Psi_hat = 3.210  step 0.0000
+00:29:01   fit2 it 11: mean Psi_hat = 3.210  step 0.0000
+00:29:10   fit2 it 12: mean Psi_hat = 3.210  step 0.0038 (non-monotone)
+00:29:19   fit2 it 13: mean Psi_hat = 3.208  step 0.0036 (non-monotone)
+00:29:24   fit2 it 14: mean Psi_hat = 3.209  step 0.0011
+00:29:28   fit2 it 15: mean Psi_hat = 3.210  step 0.0006
+00:29:33   fit2 it 16: mean Psi_hat = 3.210  step 0.0002
+00:29:42   fit2 it 17: mean Psi_hat = 3.210  step 0.0028 (non-monotone)
+00:29:51   fit2 it 18: mean Psi_hat = 3.210  step 0.0026 (non-monotone)
+00:30:00   fit2 it 19: mean Psi_hat = 3.210  step 0.0025 (non-monotone)
+00:30:09   fit2 it 20: mean Psi_hat = 3.210  step 0.0024 (non-monotone)
+00:30:18   fit2 it 21: mean Psi_hat = 3.210  step 0.0023 (non-monotone)
+00:30:28   fit2 it 22: mean Psi_hat = 3.210  step 0.0022 (non-monotone)
+00:30:37   fit2 it 23: mean Psi_hat = 3.210  step 0.0021 (non-monotone)
+00:30:46   fit2 it 24: mean Psi_hat = 3.210  step 0.0020 (non-monotone)
+00:30:55   fit2 it 25: mean Psi_hat = 3.210  step 0.0019 (non-monotone)
+00:31:04   fit2 it 26: mean Psi_hat = 3.210  step 0.0019 (non-monotone)
+00:31:13   fit2 it 27: mean Psi_hat = 3.210  step 0.0018 (non-monotone)
+00:31:22   fit2 it 28: mean Psi_hat = 3.210  step 0.0017 (non-monotone)
+00:31:32   fit2 it 29: mean Psi_hat = 3.210  step 0.0017 (non-monotone)
+00:31:41   fit2 it 30: mean Psi_hat = 3.210  step 0.0016 (non-monotone)
+00:31:50   fit2 it 31: mean Psi_hat = 3.210  step 0.0016 (non-monotone)
+00:31:59   fit2 it 32: mean Psi_hat = 3.210  step 0.0015 (non-monotone)
+00:32:07   fit2 it 33: mean Psi_hat = 3.210  step 0.0015 (non-monotone)
+00:32:17   fit2 it 34: mean Psi_hat = 3.210  step 0.0014 (non-monotone)
+00:32:26   fit2 it 35: mean Psi_hat = 3.210  step 0.0014 (non-monotone)
+00:32:34   fit2 it 36: mean Psi_hat = 3.210  step 0.0002
+00:32:42   fit2 it 37: mean Psi_hat = 3.210  step 0.0013 (non-monotone)
+00:32:52   fit2 it 38: mean Psi_hat = 3.210  step 0.0013 (non-monotone)
+00:33:00   fit2 it 39: mean Psi_hat = 3.210  step 0.0002
+00:33:10   fit2 it 40: mean Psi_hat = 3.210  step 0.0012 (non-monotone)
+joint: {('t', 0): 0.53}
+theta-only: PI 2.496 -> penalized 3.211 (LCB 3.195); reactive 3.702 gap 0.550  min pathwise 0.000
+joint: PI 2.496 -> penalized 3.211 (LCB 3.195); reactive 3.702 gap 0.550  min pathwise 0.000

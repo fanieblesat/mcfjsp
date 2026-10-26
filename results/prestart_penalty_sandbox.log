@@ -1,0 +1,33 @@
+random c: pairs 110 PI 65.2 penalized 62.82 min pathwise {'static': 2.017, 'reactive-plan': 1.974, 'reactive-MWR': 1.802} zeta mean {'static': -0.093, 'reactive-plan': 0.124, 'reactive-MWR': 0.105} [68s]
+23:34:41   fit2 it 0: mean Psi_hat = 73.267 (c = 0)
+23:35:36   fit2 it 1: mean Psi_hat = 72.529  step 0.0500 (non-monotone)
+23:35:54   fit2 it 2: mean Psi_hat = 72.888  step 0.0600
+23:36:36   fit2 it 3: mean Psi_hat = 73.076  step 0.0360
+23:38:21   fit2 it 4: mean Psi_hat = 73.119  step 0.0200 (non-monotone)
+23:40:00   fit2 it 5: mean Psi_hat = 72.610  step 0.0167 (non-monotone)
+23:40:23   fit2 it 6: mean Psi_hat = 72.649  step 0.0200
+23:40:46   fit2 it 7: mean Psi_hat = 72.907  step 0.0240
+23:42:15   fit2 it 8: mean Psi_hat = 72.943  step 0.0036
+23:43:21   fit2 it 9: mean Psi_hat = 72.960  step 0.0011
+23:44:06   fit2 it 10: mean Psi_hat = 72.968  step 0.0006
+cell fit time 565 max|c| 0.0
+cell: PI mean 74.49 (LCB 69.83)  ->  revealed-penalized 74.49 (LCB 69.83)
+  static: E[Cmax] 92.54  zeta mean +0.000  gap 18.06 (UCB 21.27)  min pathwise 0.041
+  reactive-plan: E[Cmax] 88.01  zeta mean +0.000  gap 13.52 (UCB 16.08)  min pathwise 0.004
+  reactive-MWR: E[Cmax] 89.04  zeta mean +0.000  gap 14.56 (UCB 17.77)  min pathwise 0.004
+23:44:10   fit2 it 0: mean Psi_hat = 73.267 (c = 0)
+23:44:19   fit2 it 1: mean Psi_hat = 73.712  step 0.1200
+23:44:29   fit2 it 2: mean Psi_hat = 74.658  step 0.1440
+23:45:03   fit2 it 3: mean Psi_hat = 74.830  step 0.0432
+23:45:50   fit2 it 4: mean Psi_hat = 74.750  step 0.0200 (non-monotone)
+23:46:36   fit2 it 5: mean Psi_hat = 74.746  step 0.0167 (non-monotone)
+23:47:21   fit2 it 6: mean Psi_hat = 74.738  step 0.0143 (non-monotone)
+23:48:05   fit2 it 7: mean Psi_hat = 74.736  step 0.0125 (non-monotone)
+23:48:52   fit2 it 8: mean Psi_hat = 74.730  step 0.0111 (non-monotone)
+23:49:36   fit2 it 9: mean Psi_hat = 74.727  step 0.0100 (non-monotone)
+23:50:19   fit2 it 10: mean Psi_hat = 74.727  step 0.0091 (non-monotone)
+b fit time 370 max|c| 0.056
+b: PI mean 74.49 (LCB 69.83)  ->  revealed-penalized 73.62 (LCB 69.11)
+  static: E[Cmax] 92.54  zeta mean -0.227  gap 19.15 (UCB 22.32)  min pathwise 0.922
+  reactive-plan: E[Cmax] 88.01  zeta mean +0.050  gap 14.33 (UCB 16.70)  min pathwise 1.324
+  reactive-MWR: E[Cmax] 89.04  zeta mean -0.031  gap 15.45 (UCB 18.59)  min pathwise 1.321
