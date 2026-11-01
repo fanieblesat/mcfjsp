@@ -8,7 +8,7 @@ cd mcfjsp
 py -3.12 -m venv .venv
 .venv\Scripts\activate
 pip install -r requirements.txt
-py -m pytest tests -q          # expect: 16 passed (~60 s)
+py -m pytest tests -q          # expect: 17 passed (~60 s)
 ```
 
 Gurobi (university/personal laptop only): `pip install gurobipy`, licence

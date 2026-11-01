@@ -178,6 +178,20 @@ master uses GLOP (duals).
   static execution under failures; a re-planning reactive policy is
   required for a meaningful value-of-reactivity comparison (to do).
 
+## v0.3.1 (2026-11-01)
+
+* `simulator.replan_policy`: re-planning reactive policy (P_NA). At every
+  decision epoch the residual problem is re-planned on the revealed state
+  (completed operations fixed; in-progress operations occupy their machines
+  for E[remaining | observed failure path]; other operations at ptilde) by
+  serial list scheduling with heads/tails; dispatch follows the fresh plan
+  (order and machine). `replan_every` thins the re-planning for large
+  instances. `ReactiveState` now exposes in-progress operations and paths.
+  Sandbox (60 scenarios): replan beats static by 1.6-6 % and the greedy
+  reactive rules by up to 9 %, where the greedy rules were often worse than
+  static execution.
+* Campaign script includes `replan`; smoke/grid commands in QUICKSTART §8.
+
 ## Known limitations / to do
 
 * Learned PPO+GNN pricer: interface in `pricers.py`; implementation pending

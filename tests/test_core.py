@@ -295,3 +295,31 @@ def test_prestart_penalty_valid():
     D, P = sample_scenario_paths(inst, 9, 0)
     r0 = penalized_bound_cpsat2(inst, D, P, RevealedPenalty.zero(inst, t_bar), 2.0, 5, 2)
     assert r0.status == "OPTIMAL"
+
+
+def test_replan_policy_feasible_and_nonanticipative():
+    """The re-planning policy's realized schedule is feasible under the
+    scenario (durations, precedences, no machine overlap) and identical
+    across scenarios that agree on the revealed history prefix (sanity of
+    non-anticipativity: same decisions at t = 0)."""
+    from mcfjsp.simulator import replan_policy, reactive_execute_realized, sample_scenario_paths
+    inst = generate(n_cells=3, machines_per_cell=(2, 3), n_jobs=8, ops_per_job=(2, 4), flexibility=0.8,
+                    availability=0.85, mttr_factor=2.0, seed=1)
+    h, q = heads_tails(inst)
+    firsts = set()
+    for n in range(5):
+        D, P = sample_scenario_paths(inst, 7, n)
+        R = reactive_execute_realized(inst, replan_policy(inst, q), D, "plan", paths=P)
+        by_m = {}
+        for a in range(inst.n_ops):
+            i = R.assign[a]
+            assert i in inst.op_proc[a] and abs(R.comp[a] - R.start[a] - D[a][i]) < 1e-9
+            p_ = inst.op_pred[a]
+            assert p_ < 0 or R.start[a] >= R.comp[p_] - 1e-9
+            by_m.setdefault(i, []).append((R.start[a], R.comp[a]))
+        for ivs in by_m.values():
+            ivs.sort()
+            for k in range(len(ivs) - 1):
+                assert ivs[k + 1][0] >= ivs[k][1] - 1e-9
+        firsts.add(tuple(sorted((a, R.assign[a]) for a in range(inst.n_ops) if R.start[a] == 0.0)))
+    assert len(firsts) == 1   # decisions at t = 0 cannot depend on the scenario

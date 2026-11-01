@@ -138,10 +138,25 @@ class ReactivePolicy:
 
 
 class ReactiveState:
+    """Revealed history available to a policy: completions, in-progress
+    operations (machine, start time) and the scenario paths of started
+    operations (failure/repair events observed so far)."""
     def __init__(self, inst: Instance, t: float):
         self.inst = inst; self.t = t
         self.comp: Dict[int, float] = {}
+        self.in_progress: Dict[int, Tuple[int, float]] = {}
         self.machine_busy_until: List[float] = [0.0] * inst.n_machines
+        self.paths: Optional[Paths] = None
+        self.cache: Dict[int, tuple] = {}
+
+    def expected_remaining(self, a: int) -> float:
+        """E[C_a | F_t] - t for an in-progress operation (Assumption 1)."""
+        i, s0 = self.in_progress[a]
+        e = self.t - s0
+        p = self.inst.op_proc[a][i]; lam, mu = self.inst.lam[i], self.inst.mu[i]
+        if self.paths is not None and lam > 0:
+            return max(0.0, conditional_expectation(p, lam, mu, self.paths[a][i], e) - e)
+        return max(0.0, p * (1.0 + (lam / mu if mu > 0 else 0.0)) - e)
 
 
 def reactive_execute(inst: Instance, policy: ReactivePolicy, D: Scenario,
@@ -150,14 +165,14 @@ def reactive_execute(inst: Instance, policy: ReactivePolicy, D: Scenario,
 
 
 def reactive_execute_realized(inst: Instance, policy: ReactivePolicy, D: Scenario,
-                              assign_rule: str = "earliest_nominal") -> Realized:
+                              assign_rule: str = "earliest_nominal", paths: Optional[Paths] = None) -> Realized:
     """Event-driven list scheduling. At each decision epoch, ready operations
     are considered in priority order; each is started on a *free* eligible
     machine of its cell (the one with the smallest nominal processing time,
     or the plan's machine if free and assign_rule == 'plan'). Decisions use
     only revealed information (completions), so the policy is in P_NA."""
     n = inst.n_ops
-    state = ReactiveState(inst, 0.0)
+    state = ReactiveState(inst, 0.0); state.paths = paths
     free = [True] * inst.n_machines
     ready_time = {}  # op -> earliest time it can start (release / predecessor completion)
     for a in range(n):
@@ -180,25 +195,31 @@ def reactive_execute_realized(inst: Instance, policy: ReactivePolicy, D: Scenari
                 ready.add(a)
             else:
                 state.comp[a] = t; free[i] = True; done += 1; makespan = max(makespan, t); comp[a] = t
+                state.in_progress.pop(a, None)
                 s = inst.op_succ[a]
                 if s >= 0:
                     ready.add(s)
         # dispatch
         progress = True
+        epoch_hook = getattr(policy, "on_epoch", None)
         while progress:
             progress = False
+            if epoch_hook is not None:
+                epoch_hook(state, ready, free)
             for a in sorted(ready, key=lambda a: policy.priority(a, state)):
                 cands = [i for i in inst.op_proc[a] if free[i]]
                 if not cands:
                     continue
-                if assign_rule == "plan" and getattr(policy, "plan_assign", None) is not None \
-                        and free[policy.plan_assign[a]]:
-                    i = policy.plan_assign[a]
+                pa = getattr(policy, "plan_assign", None)
+                pi_ = (pa[a] if (pa is not None and (isinstance(pa, dict) and a in pa or isinstance(pa, list))) else None)
+                if assign_rule == "plan" and pi_ is not None and free[pi_]:
+                    i = pi_
                 else:
                     i = min(cands, key=lambda i: (inst.op_proc[a][i], i))
                 free[i] = False
                 ready.discard(a)
                 assign[a] = i; start[a] = t
+                state.in_progress[a] = (i, t)
                 heapq.heappush(events, (t + D[a][i], 1, a, i))
                 progress = True
                 break
@@ -221,3 +242,72 @@ def rule_policy(inst: Instance, tails: List[int], name: str = "MWR") -> Reactive
     if name == "FIFO":
         return ReactivePolicy(lambda a, st: (inst.op_job[a], inst.op_pos[a]))
     raise ValueError(name)
+
+
+# ---- re-planning policy (cell agents re-invoked during execution) ----------
+def replan_policy(inst: Instance, tails: List[int], rule: str = "EST-MWR", replan_every: int = 1) -> ReactivePolicy:
+    """At every decision epoch, re-plan the residual problem on the revealed
+    state: completed operations are fixed, in-progress operations occupy
+    their machines for their expected remaining time given the observed
+    failure path, all other operations use expected durations ptilde.  The
+    residual plan (serial list scheduling with heads/tails) gives the
+    dispatch order (planned start, ties by remaining work) and the preferred
+    machine (the plan's machine if free).  Decisions use only F_t, so the
+    policy is in P_NA."""
+    pt = expected_durations(inst)
+    pmin_t = [min(pt[a].values()) for a in range(inst.n_ops)]
+    # expected tails along the job (static)
+    tail_e = [0.0] * inst.n_ops
+    for ops in inst.job_ops:
+        for k in range(len(ops) - 2, -1, -1):
+            tail_e[ops[k]] = tail_e[ops[k + 1]] + pmin_t[ops[k + 1]]
+
+    pol = ReactivePolicy(lambda a, st: st.cache.get(a, (float("inf"), 0.0, a)))
+    pol.plan_assign = {}
+    counter = [0]
+
+    def on_epoch(state: ReactiveState, ready: set, free: List[bool]):
+        t = state.t
+        counter[0] += 1
+        if replan_every > 1 and (counter[0] - 1) % replan_every != 0 and all(a in state.cache for a in ready):
+            return
+        # machine availability and job availability from the revealed state
+        mfree = [t] * inst.n_machines
+        job_avail = {}
+        for a, (i, s0) in state.in_progress.items():
+            fin = t + state.expected_remaining(a)
+            mfree[i] = max(mfree[i], fin)
+            s = inst.op_succ[a]
+            if s >= 0:
+                job_avail[s] = fin
+        remaining = [a for a in range(inst.n_ops) if a not in state.comp and a not in state.in_progress]
+        est = {}
+        for a in remaining:
+            if inst.op_pos[a] == 0:
+                est[a] = max(t, float(inst.release[inst.op_job[a]]))
+            else:
+                p_ = inst.op_pred[a]
+                est[a] = job_avail.get(a, t) if p_ in state.in_progress else (max(t, state.comp.get(p_, t)) if p_ in state.comp else None)
+        # serial list scheduling over the residual problem
+        planned = {}
+        pending = set(remaining)
+        while pending:
+            cands = [a for a in pending if est[a] is not None]
+            if not cands:
+                break
+            # earliest start - most work remaining
+            def key(a):
+                opts = [(max(est[a], mfree[i]) + pt[a][i], max(est[a], mfree[i]), i) for i in inst.op_proc[a]]
+                fin, s_, i = min(opts)
+                return (s_, -(pmin_t[a] + tail_e[a]), a, i, fin)
+            s_, _, a, i, fin = min(key(a) for a in cands)
+            planned[a] = (s_, i); mfree[i] = fin
+            pending.discard(a)
+            succ = inst.op_succ[a]
+            if succ >= 0 and succ in pending:
+                est[succ] = fin
+        state.cache = {a: (s_, -(pmin_t[a] + tail_e[a]), a) for a, (s_, i) in planned.items()}
+        pol.plan_assign = {a: i for a, (s_, i) in planned.items()}
+
+    pol.on_epoch = on_epoch
+    return pol

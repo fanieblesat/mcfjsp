@@ -39,7 +39,7 @@ from mcfjsp.dispatch import best_dispatch  # noqa: E402
 from mcfjsp.cg import CGParams, ColumnGeneration  # noqa: E402
 from mcfjsp.propagation import destructive_bound  # noqa: E402
 from mcfjsp.simulator import (static_execute_realized, reactive_execute_realized, plan_order_policy, rule_policy,  # noqa: E402
-                              sample_scenario, round_scenario)
+                              replan_policy, sample_scenario, sample_scenario_paths, round_scenario)
 from mcfjsp.stochastic import scenario_bound  # noqa: E402
 from mcfjsp.penalty import Penalty, fit_penalty, penalized_bound_cpsat  # noqa: E402
 from mcfjsp.baselines import cpsat_plant  # noqa: E402
@@ -90,6 +90,7 @@ def main():
     ap.add_argument("--penalty-param", default="op", choices=["scalar", "cell", "op"])
     ap.add_argument("--penalty-iters", type=int, default=12)
     ap.add_argument("--shave-time", type=float, default=120.0)
+    ap.add_argument("--replan-every", type=int, default=0, help="re-planning period in epochs (0 = 1 below 300 ops, 5 above)")
     ap.add_argument("--out", default="results/stochastic_campaign")
     args = ap.parse_args()
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(message)s", datefmt="%H:%M:%S", stream=sys.stdout)
@@ -125,10 +126,15 @@ def main():
         log.info("mean-value certificate (static policies): %d (head-tail %d, destructive %d)", mv_bound, htf, rd["lb"])
         # ---- policies
         h, q = heads_tails(inst)
+        every = args.replan_every or (1 if inst.n_ops <= 300 else 5)
+        paths_box = {}
         pols = {"static": lambda D: static_execute_realized(inst, plan, D),
                 "reactive-plan": lambda D: reactive_execute_realized(inst, plan_order_policy(inst, plan), D, "plan"),
                 "reactive-MWR": lambda D: reactive_execute_realized(inst, rule_policy(inst, q, "MWR"), D),
-                "reactive-SPT": lambda D: reactive_execute_realized(inst, rule_policy(inst, q, "SPT"), D)}
+                "reactive-SPT": lambda D: reactive_execute_realized(inst, rule_policy(inst, q, "SPT"), D),
+                "replan": lambda D: reactive_execute_realized(inst, replan_policy(inst, q, replan_every=every), D, "plan",
+                                                              paths=paths_box.get("P"))}
+        row["replan_every"] = every
         use_cp = inst.n_ops <= args.cp_max_ops
         t_bar = 3.0 * plan.makespan
         pen = None
@@ -144,7 +150,7 @@ def main():
         vals = {k: [] for k in pols}; zeta = {k: [] for k in pols}
         t0 = time.time()
         for n in range(args.scenarios):
-            D = sample_scenario(inst, args.seed, n)
+            D, P = sample_scenario_paths(inst, args.seed, n); paths_box["P"] = P
             sb = scenario_bound(inst, D, args.kappa, use_lp=False)
             phi_ht.append(sb.phi)
             if use_cp:
