@@ -192,6 +192,24 @@ master uses GLOP (duals).
   static execution.
 * Campaign script includes `replan`; smoke/grid commands in QUICKSTART §8.
 
+## v0.3.2 (2026-11-02)
+
+* `simulator.replan_opt_policy`: reactive policy that re-optimizes the
+  residual problem with CP-SAT (in-progress operations fixed for their
+  expected remaining time given the observed path; remaining operations
+  free; warm start from the current plan; time limit) at t = 0, at
+  disruptions and every k completions; plan-order dispatch in between.
+  Sandbox: on 37-op instances no gain over the static CG+LNS plan (value of
+  reactivity ~ 0); on 164 ops -8.6 % vs static, -5.8 % vs plan-order
+  reactive, gap to the PI certificate 29 % -> 18 % (37 re-optimizations
+  and 17 s CP-SAT per scenario on 2 threads).
+* Campaign: `replan-opt` policy (`--opt-cp-time`, `--opt-every`); penalty
+  fitting now opt-in (`--penalty`) after the grid showed theta = 0 at hours
+  of cost on these instances.
+* Grid v0.3.1 (results/stoch_grid.csv): certified gaps 15-56 %, dominated by
+  the value of perfect information; greedy reactive rules are not better
+  than static execution; myopic re-planning helps only at scale.
+
 ## Known limitations / to do
 
 * Learned PPO+GNN pricer: interface in `pricers.py`; implementation pending

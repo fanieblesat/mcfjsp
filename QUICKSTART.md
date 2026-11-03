@@ -87,7 +87,7 @@ python scripts/stochastic_campaign.py `
          n_cells=4,machines_per_cell=2-3,n_jobs=12,ops_per_job=2-4,flexibility=0.3,availability=0.85,mttr_factor=2,seed=1 `
          n_cells=5,machines_per_cell=2-3,n_jobs=40,ops_per_job=3-5,flexibility=0.6,availability=0.9,mttr_factor=2,seed=2 `
          n_cells=8,machines_per_cell=2-4,n_jobs=100,ops_per_job=3-6,flexibility=0.5,availability=0.9,mttr_factor=2,seed=3 `
-   --scenarios 200 --train 40 --kappa 2 --time 300 --threads 6 --cp-time 10 --cp-max-ops 400 --out results/stoch_grid 2>&1 | Tee-Object logs/stoch_grid.log
+   --scenarios 200 --kappa 2 --time 300 --threads 6 --cp-time 10 --cp-max-ops 400 --opt-cp-time 2 --opt-every 5 --out results/stoch_grid2 2>&1 | Tee-Object logs/stoch_grid2.log
 ```
 Columns: `pi_ht_*`, `pi_cp_*`, `pen_*` (bounds, mean and 95 % LCB), per policy
 `<policy>_mean/_cvar95/_gap_pi_*/_cert/_gap_cert_pct/_gap_pen_*`.

@@ -196,6 +196,9 @@ def reactive_execute_realized(inst: Instance, policy: ReactivePolicy, D: Scenari
             else:
                 state.comp[a] = t; free[i] = True; done += 1; makespan = max(makespan, t); comp[a] = t
                 state.in_progress.pop(a, None)
+                if not hasattr(state, "last_assign"):
+                    state.last_assign = {}
+                state.last_assign[a] = i
                 s = inst.op_succ[a]
                 if s >= 0:
                     ready.add(s)
@@ -308,6 +311,113 @@ def replan_policy(inst: Instance, tails: List[int], rule: str = "EST-MWR", repla
                 est[succ] = fin
         state.cache = {a: (s_, -(pmin_t[a] + tail_e[a]), a) for a, (s_, i) in planned.items()}
         pol.plan_assign = {a: i for a, (s_, i) in planned.items()}
+
+    pol.on_epoch = on_epoch
+    return pol
+
+
+# ---- re-optimizing re-planning policy (planner's machinery during execution) ----
+def replan_opt_policy(inst: Instance, plan: Schedule, cp_time: float = 1.0, threads: int = 1,
+                      disruption_factor: float = 1.5, every: int = 0, kappa: float = 1.0) -> ReactivePolicy:
+    """P_NA policy that re-optimizes the residual problem with CP-SAT.
+    Triggers: t = 0; a completion whose realized duration exceeded its
+    expectation by the factor `disruption_factor`; every `every`-th
+    completion if every > 0.  Residual model: in-progress operations occupy
+    their machine for E[remaining | observed path] (rounded up), remaining
+    operations are free (expected durations ptilde rounded up, grid 1/kappa),
+    job precedences and release dates; objective makespan; warm start from
+    the current plan; time limit cp_time.  Between triggers the current
+    plan's order and machines are followed (plan-order dispatch)."""
+    from ortools.sat.python import cp_model
+    pt = expected_durations(inst)
+    pol = ReactivePolicy(lambda a, st: st.cache.get(a, (float("inf"), a)))
+    pol.plan_assign = {a: plan.assign[a] for a in range(inst.n_ops)}
+    cur_start = {a: float(plan.start[a]) for a in range(inst.n_ops)}
+    state_box = {"completions": 0, "last_disrupted": True, "stats": {"replans": 0, "time": 0.0}}
+    pol.stats = state_box["stats"]
+
+    def reoptimize(state: ReactiveState):
+        import time as _t
+        t0 = _t.time(); t = state.t
+        remaining = [a for a in range(inst.n_ops) if a not in state.comp and a not in state.in_progress]
+        if not remaining:
+            return
+        mdl = cp_model.CpModel()
+        H = int(math.ceil(kappa * (t + sum(max(pt[a].values()) for a in remaining) + 1)))
+        for a, (i, s0) in state.in_progress.items():
+            H += int(math.ceil(kappa * state.expected_remaining(a)))
+        start, end, pres = {}, {}, {}
+        ivs = {i: [] for i in range(inst.n_machines)}
+        t_int = int(math.floor(kappa * t))
+        cmax = mdl.NewIntVar(0, H, "cmax")
+        fin_pred = {}
+        for a, (i, s0) in state.in_progress.items():        # fixed occupation until expected completion
+            rem = int(math.ceil(kappa * state.expected_remaining(a)))
+            if rem > 0:
+                ivs[i].append(mdl.NewIntervalVar(t_int, rem, t_int + rem, f"busy{a}"))
+            succ = inst.op_succ[a]
+            if succ >= 0:
+                fin_pred[succ] = t_int + rem
+        for a in remaining:
+            lo = t_int
+            if inst.op_pos[a] == 0:
+                lo = max(lo, int(math.ceil(kappa * inst.release[inst.op_job[a]])))
+            if a in fin_pred:
+                lo = max(lo, fin_pred[a])
+            s = mdl.NewIntVar(lo, H, f"s{a}"); e = mdl.NewIntVar(0, H, f"e{a}")
+            start[a] = s; end[a] = e
+            lits = []
+            for i in inst.op_proc[a]:
+                p = max(1, int(math.ceil(kappa * pt[a][i])))
+                x = mdl.NewBoolVar(f"x{a}_{i}")
+                ivs[i].append(mdl.NewOptionalIntervalVar(s, p, e, x, f"iv{a}_{i}")); lits.append(x); pres[(a, i)] = x
+                mdl.AddHint(x, 1 if pol.plan_assign.get(a) == i else 0)
+            mdl.AddExactlyOne(lits)
+            mdl.AddHint(s, max(lo, int(kappa * cur_start.get(a, t))))
+            if inst.op_succ[a] < 0:
+                mdl.Add(cmax >= e)
+        for a in remaining:
+            p_ = inst.op_pred[a]
+            if p_ >= 0 and p_ in start:
+                mdl.Add(start[a] >= end[p_])
+        for i in range(inst.n_machines):
+            if len(ivs[i]) > 1:
+                mdl.AddNoOverlap(ivs[i])
+        mdl.Minimize(cmax)
+        solver = cp_model.CpSolver()
+        solver.parameters.max_time_in_seconds = cp_time
+        solver.parameters.num_workers = threads
+        st = solver.Solve(mdl)
+        if st in (cp_model.OPTIMAL, cp_model.FEASIBLE):
+            for a in remaining:
+                cur_start[a] = solver.Value(start[a]) / kappa
+                pol.plan_assign[a] = next(i for i in inst.op_proc[a] if solver.Value(pres[(a, i)]))
+        state_box["stats"]["replans"] += 1
+        state_box["stats"]["time"] += _t.time() - t0
+
+    def on_epoch(state: ReactiveState, ready: set, free: List[bool]):
+        # detect disruption since the last epoch: completions with D >= factor * ptilde
+        n_comp = len(state.comp)
+        trigger = state.t == 0.0 and state_box["last_disrupted"]
+        if n_comp > state_box["completions"]:
+            new = n_comp - state_box["completions"]
+            state_box["completions"] = n_comp
+            # realized durations of the newly completed operations are in state.comp - start; we approximate the
+            # disruption test by comparing completion time with the planned completion (plan start + ptilde)
+            for a, c in state.comp.items():
+                if a in state_box.setdefault("seen", set()):
+                    continue
+                state_box["seen"].add(a)
+                i = state.last_assign.get(a) if hasattr(state, "last_assign") else None
+                planned_c = cur_start.get(a, 0.0) + (pt[a][i] if i is not None else min(pt[a].values()))
+                if c > planned_c + (disruption_factor - 1.0) * min(pt[a].values()):
+                    trigger = True
+            if every > 0 and (n_comp // every) != ((n_comp - new) // every):
+                trigger = True
+        if trigger:
+            reoptimize(state)
+            state_box["last_disrupted"] = False
+        state.cache = {a: (cur_start.get(a, float("inf")), a) for a in ready}
 
     pol.on_epoch = on_epoch
     return pol

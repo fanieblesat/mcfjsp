@@ -39,7 +39,7 @@ from mcfjsp.dispatch import best_dispatch  # noqa: E402
 from mcfjsp.cg import CGParams, ColumnGeneration  # noqa: E402
 from mcfjsp.propagation import destructive_bound  # noqa: E402
 from mcfjsp.simulator import (static_execute_realized, reactive_execute_realized, plan_order_policy, rule_policy,  # noqa: E402
-                              replan_policy, sample_scenario, sample_scenario_paths, round_scenario)
+                              replan_policy, replan_opt_policy, sample_scenario, sample_scenario_paths, round_scenario)
 from mcfjsp.stochastic import scenario_bound  # noqa: E402
 from mcfjsp.penalty import Penalty, fit_penalty, penalized_bound_cpsat  # noqa: E402
 from mcfjsp.baselines import cpsat_plant  # noqa: E402
@@ -91,6 +91,10 @@ def main():
     ap.add_argument("--penalty-iters", type=int, default=12)
     ap.add_argument("--shave-time", type=float, default=120.0)
     ap.add_argument("--replan-every", type=int, default=0, help="re-planning period in epochs (0 = 1 below 300 ops, 5 above)")
+    ap.add_argument("--penalty", action="store_true", help="fit and evaluate own-duration penalties (slow; demonstration only)")
+    ap.add_argument("--opt-cp-time", type=float, default=2.0, help="CP-SAT seconds per re-optimization of replan-opt")
+    ap.add_argument("--opt-every", type=int, default=5, help="replan-opt: re-optimize every k completions (plus disruptions)")
+    ap.add_argument("--opt-threads", type=int, default=0, help="threads per re-optimization (0 = --threads)")
     ap.add_argument("--out", default="results/stochastic_campaign")
     args = ap.parse_args()
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(message)s", datefmt="%H:%M:%S", stream=sys.stdout)
@@ -133,12 +137,15 @@ def main():
                 "reactive-MWR": lambda D: reactive_execute_realized(inst, rule_policy(inst, q, "MWR"), D),
                 "reactive-SPT": lambda D: reactive_execute_realized(inst, rule_policy(inst, q, "SPT"), D),
                 "replan": lambda D: reactive_execute_realized(inst, replan_policy(inst, q, replan_every=every), D, "plan",
-                                                              paths=paths_box.get("P"))}
-        row["replan_every"] = every
+                                                              paths=paths_box.get("P")),
+                "replan-opt": lambda D: reactive_execute_realized(
+                    inst, replan_opt_policy(inst, plan, cp_time=args.opt_cp_time, threads=(args.opt_threads or args.threads),
+                                            disruption_factor=1.5, every=args.opt_every), D, "plan", paths=paths_box.get("P"))}
+        row["replan_every"] = every; row["opt_cp_time"] = args.opt_cp_time; row["opt_every"] = args.opt_every
         use_cp = inst.n_ops <= args.cp_max_ops
         t_bar = 3.0 * plan.makespan
         pen = None
-        if use_cp:
+        if use_cp and args.penalty:
             t = time.time()
             pen = fit_penalty(inst, [(args.seed + 1, n) for n in range(args.train)], t_bar, param=args.penalty_param,
                               iters=args.penalty_iters, kappa=args.kappa, cp_time=args.cp_time, threads=args.threads, log=log)
@@ -156,8 +163,9 @@ def main():
             if use_cp:
                 r0 = penalized_bound_cpsat(inst, D, Penalty.zero(inst, t_bar), args.kappa, args.cp_time, args.threads)
                 phi_cp.append(max(sb.phi, r0.psi_hat)); cp_closed += int(r0.status == "OPTIMAL")
-                rp = penalized_bound_cpsat(inst, D, pen, args.kappa, args.cp_time, args.threads)
-                psi.append(rp.psi_hat)
+                if pen is not None:
+                    rp = penalized_bound_cpsat(inst, D, pen, args.kappa, args.cp_time, args.threads)
+                    psi.append(rp.psi_hat)
             for k, pol in pols.items():
                 R = pol(D)
                 vals[k].append(R.makespan)
@@ -170,12 +178,14 @@ def main():
         row.update(t_scenarios=round(time.time() - t0, 1), pi_ht_mean=round(phi_ht.mean(), 2), pi_ht_lcb=round(lcb(phi_ht), 2))
         best_pi = phi_ht
         if use_cp:
-            phi_cp = np.array(phi_cp); psi = np.array(psi)
-            row.update(pi_cp_mean=round(phi_cp.mean(), 2), pi_cp_lcb=round(lcb(phi_cp), 2), pi_cp_optimal_frac=round(cp_closed / args.scenarios, 3),
-                       pen_mean=round(psi.mean(), 2), pen_lcb=round(lcb(psi), 2))
+            phi_cp = np.array(phi_cp)
+            row.update(pi_cp_mean=round(phi_cp.mean(), 2), pi_cp_lcb=round(lcb(phi_cp), 2), pi_cp_optimal_frac=round(cp_closed / args.scenarios, 3))
+            if pen is not None:
+                psi = np.array(psi); row.update(pen_mean=round(psi.mean(), 2), pen_lcb=round(lcb(psi), 2))
             best_pi = phi_cp
-        log.info("certificates: PI(head-tail) %.2f (LCB %.2f)%s", phi_ht.mean(), lcb(phi_ht),
-                 f"; PI(CP-SAT) {phi_cp.mean():.2f} (LCB {lcb(phi_cp):.2f}, optimal in {100*cp_closed/args.scenarios:.0f}%); penalized {psi.mean():.2f} (LCB {lcb(psi):.2f})" if use_cp else "")
+        log.info("certificates: PI(head-tail) %.2f (LCB %.2f)%s%s", phi_ht.mean(), lcb(phi_ht),
+                 f"; PI(CP-SAT) {phi_cp.mean():.2f} (LCB {lcb(phi_cp):.2f}, optimal in {100*cp_closed/args.scenarios:.0f}%)" if use_cp else "",
+                 f"; penalized {psi.mean():.2f} (LCB {lcb(psi):.2f})" if pen is not None else "")
         for k in pols:
             x = np.array(vals[k]); srt = np.sort(x); m = max(1, int(math.ceil(0.05 * len(x))))
             cvar = float(srt[-m:].mean())
@@ -200,7 +210,7 @@ def main():
             wr = csv.DictWriter(f, fieldnames=sorted(set(k for r_ in rows for k in r_))); wr.writeheader(); wr.writerows(rows)
         with open(args.out + "_" + inst.name + ".json", "w") as f:
             json.dump(dict(row=row, phi_ht=phi_ht.tolist(), phi_cp=(phi_cp.tolist() if use_cp else None),
-                           psi=(psi.tolist() if use_cp else None), makespans=vals), f)
+                           psi=(psi.tolist() if pen is not None else None), makespans=vals), f)
         log.info("row: %s", json.dumps(row))
     log.info("done: %d instances -> %s.csv", len(rows), args.out)
 
