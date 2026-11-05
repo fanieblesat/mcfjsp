@@ -1,0 +1,8 @@
+Metadata-Version: 2.4
+Name: mcfjsp
+Version: 0.3.3
+Summary: Certified column generation for multi-cell flexible job shop scheduling under machine failures
+Requires-Python: >=3.11
+Requires-Dist: ortools>=9.12
+Requires-Dist: numpy>=1.26
+Requires-Dist: scipy>=1.11

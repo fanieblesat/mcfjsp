@@ -172,8 +172,9 @@ def main():
                 if pen is not None:
                     zeta[k].append(pen.zeta(R, D))
             if (n + 1) % 20 == 0:
-                log.info("  scenario %d/%d  [%.0fs]  Phi_HT=%.1f%s", n + 1, args.scenarios, time.time() - t0, sb.phi,
-                         f"  Phi_CP={phi_cp[-1]:.1f}  Psi={psi[-1]:.1f}" if use_cp else "")
+                log.info("  scenario %d/%d  [%.0fs]  Phi_HT=%.1f%s%s", n + 1, args.scenarios, time.time() - t0, sb.phi,
+                         f"  Phi_CP={phi_cp[-1]:.1f}" if use_cp else "",
+                         f"  Psi={psi[-1]:.1f}" if pen is not None else "")
         phi_ht = np.array(phi_ht)
         row.update(t_scenarios=round(time.time() - t0, 1), pi_ht_mean=round(phi_ht.mean(), 2), pi_ht_lcb=round(lcb(phi_ht), 2))
         best_pi = phi_ht
