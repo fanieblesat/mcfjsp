@@ -79,6 +79,9 @@ def main():
     ap.add_argument("--gen", nargs="*", default=[])
     ap.add_argument("--coupled", nargs="*", default=[])
     ap.add_argument("--instances", nargs="*", default=[])
+    ap.add_argument("--inst-availability", type=float, default=0.9,
+                    help="failure model for loaded instances without one: availability A, MTTR = mttr-factor x mean processing time, per cell")
+    ap.add_argument("--inst-mttr-factor", type=float, default=2.0)
     ap.add_argument("--scenarios", type=int, default=200)
     ap.add_argument("--train", type=int, default=40, help="training scenarios for the penalty (separate seed)")
     ap.add_argument("--seed", type=int, default=12345)
@@ -102,7 +105,21 @@ def main():
     os.makedirs(os.path.dirname(args.out) or ".", exist_ok=True)
 
     insts = [generate(**parse_kv(g)) for g in args.gen] + [generate_coupled(**parse_kv(g)) for g in args.coupled]
-    insts += [Instance.load(f) for f in args.instances]
+    for inst in insts:  # unique names: same generator seed with different availability/flexibility must not collide
+        avail_ = inst.mu[0] / (inst.lam[0] + inst.mu[0]); flex_ = sum(len(d) for d in inst.op_proc) / inst.n_ops
+        inst.name = f"{inst.name}_a{avail_:.2f}_f{flex_:.2f}"
+    for f in args.instances:
+        inst = Instance.load(f)
+        if max(inst.lam) == 0.0:  # e.g. the industrial windows: same failure model as the generator, per cell
+            import numpy as np
+            for c in range(inst.n_cells):
+                ps = [min(d.values()) for a in inst.ops_of_cell[c] for d in [inst.op_proc[a]]]
+                mean_p = float(np.mean(ps)) if ps else 1.0
+                mu_c = 1.0 / (args.inst_mttr_factor * mean_p)
+                for i in inst.machines_of_cell[c]:
+                    inst.mu[i] = mu_c; inst.lam[i] = mu_c * (1.0 - args.inst_availability) / args.inst_availability
+            inst.name = f"{inst.name}_a{args.inst_availability:.2f}"
+        insts.append(inst)
     rows = []
     for inst in insts:
         assert max(inst.lam) > 0, f"{inst.name}: no failures"
