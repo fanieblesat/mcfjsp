@@ -82,6 +82,7 @@ def main():
     ap.add_argument("--inst-availability", type=float, default=0.9,
                     help="failure model for loaded instances without one: availability A, MTTR = mttr-factor x mean processing time, per cell")
     ap.add_argument("--inst-mttr-factor", type=float, default=2.0)
+    ap.add_argument("--skip-policies", nargs="*", default=[], help="policies to leave out, e.g. replan-opt where it is not affordable")
     ap.add_argument("--scenarios", type=int, default=200)
     ap.add_argument("--train", type=int, default=40, help="training scenarios for the penalty (separate seed)")
     ap.add_argument("--seed", type=int, default=12345)
@@ -158,6 +159,10 @@ def main():
                 "replan-opt": lambda D: reactive_execute_realized(
                     inst, replan_opt_policy(inst, plan, cp_time=args.opt_cp_time, threads=(args.opt_threads or args.threads),
                                             disruption_factor=1.5, every=args.opt_every), D, "plan", paths=paths_box.get("P"))}
+        if args.skip_policies:
+            for k in args.skip_policies:
+                pols.pop(k, None)
+            row["skipped_policies"] = ",".join(args.skip_policies)
         row["replan_every"] = every; row["opt_cp_time"] = args.opt_cp_time; row["opt_every"] = args.opt_every
         use_cp = inst.n_ops <= args.cp_max_ops
         t_bar = 3.0 * plan.makespan
