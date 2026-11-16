@@ -323,3 +323,16 @@ def test_replan_policy_feasible_and_nonanticipative():
                 assert ivs[k + 1][0] >= ivs[k][1] - 1e-9
         firsts.add(tuple(sorted((a, R.assign[a]) for a in range(inst.n_ops) if R.start[a] == 0.0)))
     assert len(firsts) == 1   # decisions at t = 0 cannot depend on the scenario
+
+
+def test_head_tail_bound_matches_reference_values():
+    """gamma_HT must equal the values computed by the exhaustive (pre-v0.3.8) implementation."""
+    from mcfjsp.generator import generate, generate_coupled
+    from mcfjsp.bounds import heads_tails, head_tail_bounds
+    from mcfjsp.dispatch import best_dispatch
+    cases = [(generate(n_cells=4, machines_per_cell=(2, 3), n_jobs=12, ops_per_job=(2, 4), flexibility=0.8, seed=1), 45),
+             (generate(n_cells=5, machines_per_cell=(2, 3), n_jobs=40, ops_per_job=(3, 5), flexibility=0.6, seed=2), 188),
+             (generate_coupled(n_cells=15, n_jobs=15, visits_per_job=(15, 15), ops_per_visit=(1, 1), seed=1), 925)]
+    for inst, expected in cases:
+        _, q = heads_tails(inst); ref, _, _ = best_dispatch(inst, q)
+        assert head_tail_bounds(inst, ref.makespan, cp_time=0, use_cpsat=False)["gamma_ht"] == expected
