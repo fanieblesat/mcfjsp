@@ -1,7 +1,7 @@
 """Build anonymized multi-cell FJSP instances from the plant's order export.
 
     python scripts/export_industrial.py --raw /path/to/21s_export_2025 --out data/industrial \
-        --windows 1:4 3:4 7:4 --scale 0.9137 --seed 7
+        --windows 1:4 3:4 7:4 --scale <factor> --seed 7
 
 The raw export (one JSON line per closed production order, with the planned
 step list `extra.planning` and the routing) never enters the repository.
@@ -15,7 +15,7 @@ Anonymization (irreversible from the published files):
   * cells and machines are renamed c1..c8 / m1..m48, in a fixed order that is
     not the plant's naming order; article numbers, order ids, product names,
     zone ids and dates are dropped;
-  * every duration is multiplied by a fixed, unpublished factor (`--scale`) and
+  * every duration is multiplied by a fixed factor (`--scale`, not disclosed in the paper) and
     rounded to whole minutes; release times are relative to the window start;
   * the calendar position of each window is not recorded (only its length).
 
@@ -84,7 +84,7 @@ def main():
     ap.add_argument("--raw", required=True)
     ap.add_argument("--out", default="data/industrial")
     ap.add_argument("--windows", nargs="+", default=["1:4", "3:4", "7:4"], help="days:count")
-    ap.add_argument("--scale", type=float, required=True, help="unpublished duration factor")
+    ap.add_argument("--scale", type=float, required=True, help="duration scale factor (kept private; not disclosed in the paper)")
     ap.add_argument("--seed", type=int, default=7)
     ap.add_argument("--min-release-year", type=int, default=2025)
     a = ap.parse_args()
@@ -156,7 +156,7 @@ def main():
                               "ops": [{"cell": op_cell[x], "proc": {str(m): p for m, p in op_proc[x].items()}}
                                       for x in ops]} for j, ops in enumerate(job_ops)],
                     "meta": {"source": "anonymized plant export", "window_days": days, "flexibility": flex,
-                             "note": "durations rescaled by an unpublished factor; failures set by the campaign"}}
+                             "note": "durations rescaled by a fixed undisclosed factor; failures set by the campaign"}}
             with open(os.path.join(a.out, name + ".json"), "w") as f:
                 json.dump(inst, f)
             n_ops = len(op_job)

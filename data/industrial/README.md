@@ -11,9 +11,10 @@ year (observed flexibility).
 
 Anonymization: cells `c1..c8` and stations `m1..m48` are renamed in a
 shuffled order; product, order and station identifiers, names and calendar
-dates are removed; all durations are multiplied by an unpublished constant
-and rounded to minutes; release times are relative to the window start.
-The plant's absolute cycle times and calendar cannot be recovered.
+dates are removed; all durations are multiplied by a fixed constant that is
+not disclosed in the paper and rounded to minutes; release times are relative to the window start.
+The plant's products, volumes and calendar cannot be recovered; the scale factor is
+not part of the released instances.
 
 | cell | stations | role (generic) |
 |---|---|---|
